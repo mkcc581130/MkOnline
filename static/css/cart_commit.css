@@ -1,0 +1,202 @@
+#cartHeader{
+	height: 44px;
+	border-bottom: 1px solid #d7d7d7;
+	width: 100%;
+	background: #efefef url(../img/nav-bg.png) repeat-x 0 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 20;
+	padding-left: 40px;
+	padding-right: 48px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.main{
+	margin-top: 44px;
+	padding-bottom: 55px;
+}
+.grey{
+	color: #888 !important;
+}
+section{
+	margin-bottom: 10px;
+	background-color: #fff;
+}
+.cart-item{
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px 30px 10px 10px;
+	margin-bottom: 2px;
+	border-bottom: 1px solid #F5F5F5;
+	position: relative;
+	background-color: #fafafa;
+}
+.cart-item a{
+	color: #252525;
+	display: inline-block;
+    width: 100%;
+}
+.cart-item .info{
+	font-size: .17rem;
+	font-weight: 600;
+	font-family: PingFangSC-Regular,Helvetica,"Droid Sans",Arial,sans-serif;
+	margin-bottom: 14px;
+}
+.cart-item .info .name{
+	margin-left: 23px;
+}
+.cart-item .info .tel{
+	margin-left: 40px;
+}
+.cart-item .locate i{
+	margin-right: 6px;
+}
+.icon-jtright{
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	margin-top: -8px;
+}
+.item{
+	padding-left: 5px;
+	padding-right: 5px;
+	-moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+    height: auto;
+    position: relative;
+    transition: .5s all;
+	margin-bottom: 0;
+}
+.item .cart-item{
+	padding: 5px 0;
+    position: relative;
+    
+}
+.item .cart-item .cart-item-title {
+    display: inline-block;
+    width: 62%;
+    position: relative;
+    padding-left: 10px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.item .cart-item .cart-item-title p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    word-wrap: break-word;
+	font-size: 15px;
+	font-weight: bold;
+}
+.item .cart-item  .cart-item-title span {
+    position: absolute;
+    bottom: -28px;
+    left: 10px;
+    color: #888;
+    font-size: 12px;
+}
+.item .cart-item .cart-item-price {
+    display: inline-block;
+    width: 14%;
+    color: #f15353;
+    text-align: right;
+}
+.remain {
+    text-align: center;
+    color: #252525;
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    line-height: 30px;
+    background-color: #fff;
+    width: 100%;
+}
+.price,.coupon{
+	padding: 12px 10px 0 10px;
+}
+.coupon p{
+	font-size: .15rem;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+.price p{
+	font-size: .15rem;
+	padding-bottom: 10px;
+}
+.price p span,.coupon p span{
+	color: #F15353;
+}
+.price p.weight,.coupon p.weight{
+	color: #888;
+	font-size: .12rem;
+}
+.information .cart-item{
+	padding:20px 30px 20px 10px;
+	background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAKBAMAAACOO0tGAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAnUExURf///4u16Oxtbezz/J3B7NDh9vvd3fSmprjS8vGNje57e/jDw/7w8IQ3dnAAAABSSURBVCjPY2CAAG4l7GADVJ4hUBArEIXJJ2HXrw6TZ8auX7ABKs+zCLsBE2AGmGDXLwKT58SuX+sATIEjdgOcYfJF2A1Qg8lz4PCBwWgQUiMIAWCaOFG2MdFRAAAAAElFTkSuQmCC) -7px bottom repeat-x;
+	background-size: 64px 5px;
+}
+.total-price{
+	font-size:.18rem !important;
+	color: #333;
+	font-weight: bold;
+	text-align: right;
+}
+.total-price .goods-price{
+	font-size:.15rem;
+}
+.coupon p{
+	border-bottom: 1px solid #f5f5f5;
+}
+.coupon-name{
+	font-size: .14rem;
+	color: #888 !important;
+	margin-top: 3px;
+}
+.coupon-item{
+	height: 43px;
+}
+footer{
+	height: 50px;
+	position: fixed;
+	bottom: 0;
+	background-color: #FFFFFF;
+	line-height: 50px;
+	width: 100%;
+}
+footer>span{
+	color: #F15353;
+	font-size: .15rem;
+	margin-right: 10px;
+	font-family: PingFangSC-Regular,Helvetica,"Droid Sans",Arial,sans-serif;
+}
+footer>span .big{
+	font-size: .18rem;
+}
+footer a{
+	width: 140px;
+	height: 100%;
+	background-color: #F15353;
+	color: #fff;
+	text-align: center;
+	font-size: .16rem;
+	font-family: '黑体';
+}
+@media only screen and (max-width:375px) {
+	.item .cart-item .cart-item-title{
+		width: 57%;
+	}
+	.item .cart-item .cart-item-price{
+		width: 17%;
+	}
+}
+@media only screen and (max-width:320px) {
+	.item .cart-item .cart-item-title{
+		width: 50%;
+	}
+	.item .cart-item .cart-item-price{
+		width: 20%;
+	}
+}

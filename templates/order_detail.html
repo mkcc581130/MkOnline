@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="x-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/order_detail.css' %}" />
+		<title>订单详情</title>
+	</head>
+
+	<body>
+		<header id="orderHeader">
+			
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">订单详情</p>
+		</header>
+		<div class="main">
+			<section>
+				<div class="order-item">
+					订单号：<span>{{  order.oid }}</span>
+					<span class="right-text">{{ order.get_status_display }}</span>
+				</div>
+				<div class="order-item">
+					<i class="icon iconfont icon-huoche"></i> <span>感谢您在一慧购物！{% if order.status == 0 %}我们将在您付款后给您带去最精致的商品！{% elif order.status == 1 or order.status == 2 %}我们将尽快为您发货！{% elif order.status == 3 %}快递哥正在马不停蹄地赶来{% elif order.status == 4 %}欢迎您下次光临！{% endif %}</span>
+				</div>
+			</section>
+			<section>
+				<div class="order-item">
+					<i class="icon iconfont icon-wo"></i> <span>{{ order.address.recipient }}</span> <span class="pull-right"><i class="icon iconfont icon-shouji"></i> <span>{{ order.address.tel }}</span></span>
+					<p class="address">{{ order.address.provinces }}{{ order.address.cities }}{{ order.address.areas }}{{ order.address.detail }}</p>
+				</div>
+			</section>
+			<section class="item">
+                {% if order.get_order_goods_num == 1 %}
+                    <div class="order-item">
+                        <a href="{% url 'detail' order.get_order_goods.id %}">
+                            <img src="{{ MEDIA_URL }}{{ order.get_order_goods.image }}" width="59"/>
+                            <div class="order-item-title"><p>{{ order.get_order_goods.goods }}</p><span>{% for p in order.get_order_goods.prop  %}{{ p.props }}：{{ p.detail_props }}{% endfor %} x{{ order.get_order_goods.num }}</span></div>
+                            <p class="order-item-price"><span>￥ {{ order.get_order_goods.price }}</span></p>
+                        </a>
+                    </div>
+                {% else %}
+                    {% for o in order.get_order_goods %}
+                        <div class="order-item">
+                            <a href="{% url 'detail' o.id %}">
+                                <img src="{{ MEDIA_URL }}{{ o.image }}" width="59"/>
+                                <div class="order-item-title"><p>{{ o.goods }}</p><span>{{ o.prop }} x{{ o.num }}</span></div>
+                                <p class="order-item-price"><span>￥ {{ o.price }}</span></p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+			</section>
+			<section>
+                {% if order.status > 0 and order.status < 4 %}
+				<div class="order-item">
+					<div class="order-item-left">
+						支付方式
+					</div>
+					<div class="order-item-right">
+						{{ order.get_pay_mode_display }}
+					</div>
+					<div class="clearfix"></div>
+				</div>
+                {% endif %}
+                {% if order.status > 2 and order.status < 5 %}
+				<div class="order-item">
+					<div class="order-item-left">
+						物流信息
+					</div>
+					<div class="order-item-right">
+                        <a href="{% url 'express' order.oid %}">查看物流</a>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+                {% endif %}
+{#				<div class="order-item">#}
+{#					<div class="order-item-left">#}
+{#						发票信息#}
+{#					</div>#}
+{#					<div class="order-item-right">#}
+{#						已开发票#}
+{#					</div>#}
+{#					<div class="clearfix"></div>#}
+{#				</div>#}
+			</section>
+			<section>
+				<div class="order-item order-item-all">
+					<div class="order-item-left">
+						商品总额
+					</div>
+					<div class="order-item-right">
+						￥ <span>{{ order.paid }}</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="order-item order-item-actually">
+					<div class="order-item-right">
+						实付款：<span>￥ {{ order.paid }} <small></small></span>
+						<small>下单时间：{{ order.create_time }}</small>
+                        {% if order.status > 2 and order.status < 5 %}<small>付款时间：{{ order.pay_time }}</small>{% endif %}
+                        {% if order.status > 2 and order.status < 5 %}<small>发货时间：{{ order.delivery_time }}</small>{% endif %}
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</section>
+		</div>
+        <div class="delivery-model">
+
+        </div>
+		<footer>
+			<ul>
+                {% if order.status == 0 %}
+                    <li class="active"><a href="{% url 'pay' order.oid  %}">去支付</a></li>
+                    <li class="cancel" data-id="{{ order.oid }}"><a href="javascript:void(0);">取消订单</a></li>
+                {% elif  order.status == 1 or order.status == 2 %}
+                    <li class="remind-delivery active" data-id="{{ order.oid }}"><a href="javascript:void(0);">提醒发货</a></li>
+                {% elif  order.status == 3  %}
+                    <li class="confirm-delivery active"><a href="javascript:void(0);">确认收货</a></li>
+                {% elif  order.status == 4  %}
+                    <li class="active"><a href="">再次购买</a></li>
+                    <li class="delete" data-id="{{ order.oid }}"><a href="javascript:void(0);">删除订单</a></li>
+                {% elif  order.status == 5  %}
+                    <li class="delete" data-id="{{ order.oid }}"><a href="javascript:void(0);">删除订单</a></li>
+                {% elif  order.status == 6  %}
+                    <li>退款中</li>
+                {% endif %}
+			</ul>
+		</footer>
+        <div class="jump-modal none">
+			<div class="jump">
+				<i class="icon iconfont icon-loading"></i>
+			</div>
+			<p>删除订单成功，正在跳转</p>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	<script src="{% static 'js/order_detail.js' %}"></script>
+</html>

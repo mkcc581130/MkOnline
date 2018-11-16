@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/questions.css' %}" />
+		<title>常见问题</title>
+	</head>
+
+	<body>
+		<header id="questionHeader">
+
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">常见问题</p>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li class="active">
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+        <div class="main">
+            <ul>
+                {% for q in questions %}
+                    <li><a href="{% url 'question_detail' q.id %}">{{ forloop.counter }}.{{ q.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <script src="{% static 'js/base.js' %}"></script>
+</body>
+</html>

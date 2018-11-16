@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		<title>首页</title>
+	</head>
+
+	<body>
+		<header id="mainHeader">
+			<div class="top-icon">
+				<img src="{% static 'img/yihui.png' %}" width="34">
+			</div>
+			<div class="main-search">
+				<form action="{% url 'search' %}" method="get">
+					<input type="text" name="search" placeholder="热门商品大卖！">
+					<button type="submit"><i class="icon iconfont icon-search"></i></button>
+				</form>
+			</div>
+			<div class="main-login">
+				{% if is_active %}
+				<a href="{% url 'mine' %}"><i class="icon iconfont icon-wo"></i></a>
+				{% else %}
+				<a href="{% url 'login' %}">登录</a>
+				{% endif %}
+			</div>
+		</header>
+		<div id="contain">
+			<div class="swiper-container swiper-container1">
+				<div class="swiper-wrapper">
+					{% for banner in banners %}
+					<div class="swiper-slide">
+						<a href="{{ banner.url }}"><img src="{{ MEDIA_URL }}{{ banner.mobile_img }}" width="100%" /></a>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+			<!--<div class="contain-classify">
+				<div style="padding-bottom: 10px;">
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/shop.png" />
+							<p>超市</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/jinkou.png" />
+							<p>全球购</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/cloth.png" />
+							<p>服装城</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/xian.png" />
+							<p>生鲜</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/dog.png" />
+							<p>到家</p>
+						</a>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/chong.png" />
+							<p>充值中心</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/pig.png" />
+							<p>惠赚钱</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/quan.png" />
+							<p>领券</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/wuliu.png" />
+							<p>物流查询</p>
+						</a>
+					</div>
+					<div class="contain-classify-item">
+						<a href="javascript:void(0);">
+							<img src="img/xin.png" />
+							<p>我的关注</p>
+						</a>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>-->
+            {% if dis %}
+			<div class="contain-dic">
+				<div class="contain-heading">
+					<span>限时折扣</span>
+					<a href="javascript:void(0);" class="more">更多 <i class="icon iconfont icon-right"></i></a>
+				</div>
+				<div class="swiper-container swiper-container2">
+					<div class="swiper-wrapper">
+                        {% for d in dis %}
+						<div class="swiper-slide">
+							<a href="{% url 'detail' d.id %}"><img src="{{ MEDIA_URL }}{{ d.get_imgs.0.src }}" width="100%" />
+							<p class="price-title">{{ d.name }}</p></a>
+							<span class="now-price">{{ d.price }}</span>
+							<span class="pre-price">{{ d.price }}</span>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+            {% endif %}
+            {% if new %}
+			<div class="contain-dic">
+				<div class="contain-heading">
+					<span>新品上市</span>
+					<a href="{% url 'more' 'new' %}" class="more" data-id="1">更多 <i class="icon iconfont icon-right"></i></a>
+				</div>
+				<div class="contain-main">
+                    {% for n in new %}
+					<div class="contain-item">
+						<a href="{% url 'detail' n.id %}"><img class="trans" src="{% static 'img/white.jpg' %}" data-src="{{ MEDIA_URL }}{{ n.get_imgs.0.src }}" width="100%" />
+						<p class="goods-title"><span class="brand">慧绣</span> {{ n.name }}</p></a>
+						<p class="goods-prices">￥<span class="lfont">{{ n.price|int_price }}</span>{{ n.price|dec_price }}</p>
+					</div>
+					{% endfor %}
+					<div class="clearfix"></div>
+				</div>
+			</div>
+            {% endif %}
+            {% if hot %}
+			<div class="contain-dic">
+				<div class="contain-heading">
+					<span>热卖商品</span>
+					<a href="{% url 'more' 'hot' %}" class="more" data-id="2">更多 <i class="icon iconfont icon-right"></i></a>
+				</div>
+				<div class="contain-main">
+                    {% for h in hot %}
+					<div class="contain-item">
+						<a href="{% url 'detail' h.id %}"><img class="trans" src="{% static 'img/white.jpg' %}" data-src="{{ MEDIA_URL }}{{ h.get_imgs.0.src }}" width="100%" />
+						<p class="goods-title"><span class="brand">慧绣</span> {{ h.name }}</p></a>
+						<p class="goods-prices">￥<span class="lfont">{{ h.price|int_price }}</span>{{ h.price|dec_price }}</p>
+					</div>
+					{% endfor %}
+					<div class="clearfix"></div>
+				</div>
+			</div>
+            {% endif %}
+            {% if ex %}
+			<div class="contain-dic">
+				<div class="contain-heading">
+					<span>精选商品</span>
+					<a href="{% url 'more' 'ex' %}" class="more">更多 <i class="icon iconfont icon-right"></i></a>
+				</div>
+				<div class="contain-main">
+                    {% for e in ex %}
+					<div class="contain-item">
+						<a href="{% url 'detail' e.id %}"><img class="trans" src="{% static 'img/white.jpg' %}" data-src="{{ MEDIA_URL }}{{ e.get_imgs.0.src }}" width="100%" />
+						<p class="goods-title"><span class="brand">慧绣</span> {{ e.name }}</p></a>
+						<p class="goods-prices">￥<span class="lfont">{{ e.price|int_price }}</span>{{ e.price|dec_price }}</p>
+					</div>
+					{% endfor %}
+					<div class="clearfix"></div>
+				</div>
+			</div>
+            {% endif %}
+		</div>
+		<div class="copyright">
+			<p>Copyright © 2017-2050 yihuiculture.com 版权所有</p>
+		</div>
+		<div class="footer-height"></div>
+		<div class="to-top"><i class="icon iconfont icon-to_top"></i></div>
+		{% if coupon %}
+        <div class="show-coupon none">
+            <i class="close">X</i>
+            <img data-src="{{ MEDIA_URL }}{{ coupon.img }}" alt="{{ coupon.explain }}">
+        </div>
+        {% endif %}
+		<footer id="mainFooter">
+			<ul>
+				<li><a href="{% url 'index' %}" style="color: rgb(200,21,34);"><i class="icon iconfont icon-index"></i><p>首页</p></a></li>
+				<li><a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i><p>分类</p></a></li>
+				<li><a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i><p>购物车</p><span class="bedage">{{ len }}</span></a></li>
+				<li><a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i><p>我的</p></a></li>
+				<li class="clearfix"></li>
+			</ul>
+		</footer>
+        <div class="cart-modal none">
+			<div class="gou">
+				<i class="icon iconfont icon-gou1"></i>
+			</div>
+			<p>恭喜您领取成功</p>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/swiper.jquery.min.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+</html>

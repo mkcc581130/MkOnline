@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+		<title>用户登录</title>
+	</head>
+
+	<body>
+		<header id="loginHeader">
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">会员登录</p>
+		</header>
+		<section class="login-main">
+            <div class="login-tab">
+                <ul class="username-login login-selected"><span id="account_login_txt">账号密码登录</span></ul>
+                <ul class="sms-login"><span id="sms_login_txt">短信验证码登录</span></ul>
+            </div>
+            <div class="login-form">
+                <form id="loginForm" action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" name="username" id="loginName" placeholder="手机号/邮箱" />
+                        <i class="icon iconfont icon-cha"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" id="loginPassword" placeholder="请输入密码" />
+                        <i class="icon iconfont icon-cha"></i>
+                    </div>
+                    <!--<div class="form-group form-group-verify">
+                        <input type="text" name="loginverify" id="loginVerify" placeholder="请输入验证码" />
+                        <img src="{% static 'img/verify.png' %}"/>
+                        <i class="icon iconfont icon-cha"></i>
+                    </div>-->
+                </form>
+                <form id="smsLoginForm" action="" method="post" class="none">
+                    {% csrf_token %}
+                    <div class="form-group form-group-tel">
+                        <input type="tel" name="tel" id="loginTel" placeholder="请输入手机号" value="">
+                        <button type="button">获取手机验证码</button>
+                        <i class="icon iconfont icon-cha"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="verify" id="loginVerify" placeholder="请输入验证码" />
+                        <i class="icon iconfont icon-cha"></i>
+                    </div>
+                </form>
+            </div>
+            <div class="error-info none">
+                <i class="icon iconfont icon-jian"></i> <span></span>
+            </div>
+            <a id="loginSub" class="btn">登 录</a>
+            <div class="form-bottom">
+                <div class="pull-left to-find">
+                    <a href="{% url 'find_pwd1' 'find' %}"><i class="icon iconfont icon-suo"></i> 找回密码</a>
+                </div>
+                <div class="pull-right to-reg">
+                    <a href="{% url 'reg' %}{% if iid %}?iid={{ iid }}{% endif %}"><i class="icon iconfont icon-shouji"></i> 快速注册</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            {% if wx_url %}
+            <div class="quick-login">
+                <h4 class="txt-otherLogin">其他登录方式</h4>
+                <a href="{{ wx_url }}" class="quick-wx"><i class="icon iconfont icon-weixin"></i><br><span class="txt-wechat">微信</span></a>
+            </div>
+            {% endif %}
+		</section>
+
+        <div class="jump-modal none">
+			<div class="jump">
+				<i class="icon iconfont icon-loading"></i>
+			</div>
+			<p>登录成功，即将跳转至首页</p>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script>
+        function jump(){
+            $('.jump-modal').removeClass('none');
+            setTimeout(function () {
+                location.replace('http://'+location.hostname+':'+location.port);
+            },1000)
+        };
+        {% if is_active %}jump();{% endif %}
+    </script>
+    <script src="{% static 'js/login.js' %}"></script>
+</html>

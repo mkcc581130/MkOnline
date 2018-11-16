@@ -1,0 +1,269 @@
+/*头部导航*/
+#mainHeader{
+	height: 42px;
+	width: 100%;
+	max-width: 640px;
+	position: fixed;
+	background-color: rgba(0,0,0,0);
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	z-index: 20;
+	box-shadow: none;
+}
+#mainHeader .top-icon {
+	width: 56px;
+	height: 100%;
+	position: absolute;
+	left: 6px;
+}
+#mainHeader .top-icon img{
+	padding-top:3px;
+}
+#mainHeader .main-search{
+	margin: 0 50px 0 46px;
+	position: relative;
+}
+#mainHeader .main-search input{
+	width: 100%;
+	height: 30px;
+	border: none;
+	border-radius: 15px;
+	margin-top: 5px;
+	padding-left: 33px;
+	box-sizing: border-box;
+	background-color: #474747;
+	opacity: .7;
+	color: #fff;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #fff; opacity:1;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #fff;opacity:1;
+}
+
+input:-ms-input-placeholder{
+    color: #fff;opacity:1;
+}
+
+input::-webkit-input-placeholder{
+    color: #fff;opacity:1;
+}
+#mainHeader .main-search button{
+	display: block;
+	width: 21px;
+	height: 20px;
+	border: none;
+	background:none;
+	position: absolute;
+	top: 9px;
+	left: 6px;
+	color: #bbb;
+}
+#mainHeader .main-search button i{
+	font-size: .18rem;
+	display: block;
+}
+#mainHeader .main-login{
+	position: absolute;
+	top: 0;
+	right: 13px;
+	height: 40px;
+	line-height: 40px;
+}
+#mainHeader .main-login a{
+	color: #fff;
+}
+#mainHeader .main-login a i{
+	display: block;
+	width: 30px;
+	padding-top: 2px;
+	font-size: 30px;
+}
+/*主体部分*/
+#contain{
+	max-width: 640px;
+	width: 100%;
+	z-index: 10;
+}
+.swiper-container2{
+	background-color: #fff;
+	margin-bottom: 4px;
+	padding: 10px;
+}
+.contain-classify{
+	max-width: 100%;
+	padding: 10px 0;
+	background-color: #333;
+}
+.contain-classify .contain-classify-item{
+	width: 20%;
+	float: left;
+	box-sizing: border-box;
+}
+.contain-classify .contain-classify-item a{
+	text-align: center;
+	width: 100%;
+	display: block;
+	color: #fff;
+}
+.contain-classify .contain-classify-item a img{
+	width: 38px;
+	margin: 0 auto 4px auto;
+}
+.contain-heading{
+	height: 44px;
+	width: 100%;
+	line-height: 44px;
+	padding-left: 10px;
+	border-left: 4px solid rgb(200,21,34);
+	position: relative;
+	box-sizing: border-box;
+	background-color: #fff;
+	margin-bottom: 4px;
+}
+.contain-heading span{
+	color: rgb(200,21,34);
+	font-weight: bold;
+	font-size: .16rem;
+	font-family: '黑体';
+}
+.contain-heading .more{
+	color: rgb(200,21,34);
+	font-weight: bold;
+	position: absolute;
+	right: 18px;
+	top: 0;
+}
+
+.contain-dic .now-price{
+	display: inline-block;
+	text-align: center;
+	color: #f23030;
+	margin-top: 10px;
+	font-weight: bold;
+	font-size: .14rem;
+	margin-top: 4px;
+}
+.contain-dic .price-title{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	word-break:keep-all;
+	overflow: hidden;
+	margin-top: 8px;
+	color: #252525;
+}
+.contain-dic .pre-price{
+	display: inline-block;
+	text-align: center;
+	color: #ababab;
+	text-decoration: line-through;
+	margin-top: 4px;
+	margin-bottom: 10px;
+	font-size: .12rem;
+}
+
+.footer-height{
+	margin-top: 66px;
+}
+
+.copyright{
+	height: 36px;
+	line-height: 36px;
+	width: 100%;
+	background-color: #f8f8f8;
+	text-align: center;
+	color: #888;
+	padding-bottom: 58px;
+}
+.show-coupon{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -180px;
+	margin-left: -135px;
+	z-index:10;
+}
+.show-coupon .close{
+	position: absolute;
+	right: 25px;
+	top: 25px;
+	color: #686868;
+	font-style: normal;
+}
+.show-coupon img{
+	width: 270px;
+}
+/*底部导航栏*/
+#mainFooter{
+	z-index: 20;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	-webkit-box-shadow: 0 0 10px 0 rgba(155,143,143,0.6);
+	-moz-box-shadow: 0 0 10px 0 rgba(155,143,143,0.6);
+	box-shadow: 0 0 10px 0 rgba(155,143,143,0.6);
+	background-color: #fff;
+}
+#mainFooter li{
+	float: left;
+	width: 25%;
+	height: 100%;
+	text-align: center;
+	padding-top: 5px;
+	
+}
+#mainFooter li a{
+	color: #333;
+	font-size: .12rem;
+	display: inline-block;
+	position: relative;
+}
+#mainFooter a i{
+	font-size: .24rem;
+}
+@media only screen and (max-width: 414px) {
+	.footer-height{
+		margin-top: 54px;
+	}
+	#mainFooter{
+		height: 54px;
+	}
+	
+}
+@media only screen and (max-width: 375px) {
+	.footer-height{
+		margin-top: 50px;
+	}
+	#mainFooter{
+		height: 50px;
+	}
+	.goods-prices .lfont{
+		font-size: .18rem;
+	}
+	#mainFooter li{
+		padding-top: 3px;
+	
+	}
+}
+@media only screen and (max-width: 320px) {
+	body{
+		font-size: .12rem;
+	}
+	.goods-prices .lfont{
+	font-size: .18rem;
+}
+	.footer-height{
+		margin-top: 46px;
+	}
+	#mainFooter{
+		height: 46px;
+	}
+	#mainFooter a i{
+		font-size: .18rem;
+	}
+}

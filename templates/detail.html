@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/invitation.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/detail.css' %}" />
+        <style>
+            .popup{
+                overflow: hidden;
+                position: fixed;
+                z-index: 1000;
+                left: 0px;
+                right: 0px;
+                bottom: -{% if promote %}286{% else %}204{% endif %}px;
+                background: white;
+                visibility: visible;
+                height: {% if promote %}286{% else %}204{% endif %}px;
+                transform: translate3d(0px, 0px, 0px);
+                transition: all 300ms ease;
+                opacity: 1;
+            }
+        </style>
+		<title>商品详情</title>
+	</head>
+	<body>
+		<header id="detailHeader">
+			<ul class="top-nav">
+				<li>
+					<a class="nav-active" href="javascript:void(0);">商品</a>
+				</li>
+				<li>
+					<a href="javascript:void(0);">详情</a>
+				</li>
+				<!--<li>
+					<a href="javascript:void(0);">评价</a>
+				</li>-->
+			</ul>
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<div class="swiper-container swiper-containers">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide d-contain">
+					<div class="swiper-container swiper-container1">
+						<div class="swiper-wrapper">
+                            {% for i in goods.get_imgs %}
+							<div class="swiper-slide main-img">
+								<a href="javascript:void(0);"><img data-id="{{ i.id }}" src="{{ MEDIA_URL }}{{ i.src }}" width="100%" /></a>
+							</div>
+							{% endfor %}
+						</div>
+						<div class="swiper-circle">
+							<span class="now-swiper"></span><span class="all-swiper"></span>
+						</div>
+					</div>
+					<div class="main-item main-title">
+						<p class="title">{{ goods.name }}</p>
+                        {% if dis_price %}
+                            <p class="price-n">￥<span class="big-price">{{ dis_price|int_price }}</span><span class="small-price">{{ dis_price|dec_price }}</span> <span class="dis_icon">会员折扣</span></p>
+						    <p class="security" style="text-decoration: line-through">{{ goods.price }}</p>
+                        {% else %}
+                            <p class="price-n">￥<span class="big-price">{{ goods.price|int_price }}</span><span class="small-price">{{ goods.price|dec_price }}</span></p>
+                        {% endif %}
+
+					</div>
+{#					<div class="main-item main-gift">#}
+{#						<div class="main-item-title">促销</div>#}
+{#						<div class="main-item-right main-gift-right">#}
+{#							<dl>#}
+{#								<dt>可享受以下优惠 </dt>#}
+{##}
+{#								<dd>#}
+{#									<span class="gift-i"><small>赠品</small></span>#}
+{#									<a href="javascript:void(0);" class="gift-c">#}
+{#										<span>蝴蝶结卡包 12位卡套 时尚简约韩版卡包 赠品 粉红色（赠完即止）</span>#}
+{#										<i class="icon iconfont icon-jtright"></i>#}
+{#									</a>#}
+{#									<div class="clearfix"></div>#}
+{#								</dd>#}
+{#								<dd>#}
+{#									<span class="gift-i"><small>赠品</small></span>#}
+{#									<a href="javascript:void(0);" class="gift-c">#}
+{#										<span>芭特莉（BATELI）时尚化妆镜 赠品 【颜色随机】每个订单只限拍一个，不单独销售（赠完即止）</span>#}
+{#										<i class="icon iconfont icon-jtright"></i>#}
+{#									</a>#}
+{#									<div class="clearfix"></div>#}
+{#								</dd>#}
+{#							</dl>#}
+{#						</div>#}
+{#						<div class="clearfix"></div>#}
+{#						<div><i class="icon iconfont icon-show icon-jtbottom"></i></div>#}
+{#						<div><i class="icon iconfont icon-show icon-jttop"></i></div>#}
+{#					</div>#}
+                    {% if to_front %}
+					<div class="main-item main-choice">
+						<div class="main-item-title">已选</div>
+						<div class="main-item-right">
+                            {% for p in goods.get_prop %}
+							<span class="goods-style">{{ p.detail_props }}</span>
+							{% endfor %}
+                            <span class="goods-num">1件</span>
+                            <div class="three-point">
+								<i class="icon iconfont icon-three"></i>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+                    {% endif %}
+					<div class="main-item main-locate">
+						<ul>
+							<li class="location">
+								<div class="main-item-title">送至</div>
+								<div class="main-item-right">
+                                    {% if address %}
+									<span class="locate-sheng">{{ address.provinces }}</span>
+									<span class="locate-shi">{{ address.cities }}</span>
+									<span class="locate-qu">{{ address.areas }}</span>
+                                    {% endif %}
+									<i class="icon iconfont icon-dingwei"></i>
+									<p style="color: rgb(200,21,34);padding: 8px 0;">现货</p>
+								</div>
+								<div class="clearfix"></div>
+							</li>
+							<li class="yunfei">
+								<div class="main-item-title">运费</div>
+								<div class="main-item-right">
+									<span>满50包邮</span>
+								</div>
+								<div class="clearfix"></div>
+							</li>
+							<li class="confirm">
+								<ul>
+									<li><i class="icon iconfont icon-duigou"></i>店铺发货&售后</li>
+{#									<li><i class="icon iconfont icon-duigou"></i>货到付款</li>#}
+{#									<li><i class="icon iconfont icon-duigou"></i>送保险</li>#}
+									<li><i class="icon iconfont icon-duigou"></i>7天无理由退换货</li>
+								</ul>
+								<div class="clearfix"></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="swiper-slide more-info">
+					<ul class="more-info-nav">
+						<li class="more-info-nav-active">商品介绍</li>
+						<li>参数规格</li>
+						<li>包装售后</li>
+					</ul>
+					<div class="more-info-goods">
+						<div class="more-info-img">
+							{{ goods.detail|safe }}
+						</div>
+						<div class="more-info-tui">
+							<div class="more-info-tui-img">
+								<img class="" src="{% static 'img/guess-title.png'%}" width="112" />
+							</div>
+                            {% if ex %}
+							<div class="contain-main">
+                                {% for e in ex %}
+								<div class="contain-item">
+						            <a href="{% url 'detail' e.id %}"><img class="trans" src="{% static 'img/white.jpg' %}" data-src="{{ MEDIA_URL }}{{ e.get_imgs.0.src }}" width="100%" />
+									<p class="goods-title"><span class="brand">慧绣</span> {{ e.name }}</p></a>
+									<p class="goods-prices">￥<span class="lfont">{{ e.price|int_price }}</span>{{ e.price|dec_price }}</p>
+								</div>
+                                {% endfor %}
+								<div class="clearfix"></div>
+							</div>
+                            {% endif %}
+						</div>
+					</div>
+					<div class="more-info-canshu">
+						<table class="more-info-canshu-table">
+							<tbody>
+								<tr>
+									<td>商品编号</td>
+									<td>{{ goods.gid }}</td>
+								</tr>
+                                <tr>
+									<td>材质</td>
+									<td>{{ goods.material_quality }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="more-info-shouhou">
+						<p>售后服务：</p>
+{#						<p>本产品全国联保，享受三包服务，质保期为:<br><br><br><br>价格说明<br>1、京东价：京东价为商品的销售价，是您最终决定是否购买商品的依据。<br>2、划线价：商品展示的划横线价格为参考价，该价格可能是品牌专柜标价、商品吊牌价或由品牌供应商提供的正品零售价（如厂商指导价、建议零售价等）或该商品在京东平台上曾经展示过的销售价；由于地区、时间的差异性和市场行情波动，品牌专柜标价、商品吊牌价等可能会与您购物时展示的不一致，该价格仅供您参考。<br>3、折扣：如无特殊说明，折扣指销售商在原价、或划线价（如品牌专柜标价、商品吊牌价、厂商指导价、厂商建议零售价）等某一价格基础上计算出的优惠比例或优惠金额；如有疑问，您可在购买前联系销售商进行咨询。<br>4、异常问题：商品促销信息以商品详情页“促销”栏中的信息为准；商品的具体售价以订单结算页价格为准；如您发现活动商品售价或促销信息有异常，建议购买前先联系销售商咨询。<br></p>#}
+					</div>
+					<div style="margin-top: 50px;"></div>
+				</div>
+			</div>
+		</div>
+		<footer id="detailFooter">
+			<div class="footer-left">
+				<ul>
+					<li>
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+					<li {% if follow %}class="active"{% endif %}>
+						<a class="follow"><i class="icon iconfont {% if follow %}icon-xin1{% else %}icon-xin{% endif %}"></i>
+							<p>关注</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p><span class="bedage">{{ len }}</span>
+						</a>
+					</li>
+					<li class="clearfix"></li>
+				</ul>
+			</div>
+			<div class="footer-right">
+                <form action="{% url 'cart_commit' %}" method="get" id="detailForm">
+                    <input type="hidden" name="img_id" value="{{ goods.get_imgs.0.id }}" />
+                    <input type="hidden" name="number" value="1" />
+                    {% csrf_token %}
+                    <ul>
+                        {% if to_front %}
+                        <li class="add-to-cart">加入购物车</li>
+                        <li class="buy-now"><a>立即购买</a></li>
+                        {% else %}
+                        <li class="do-not-buy">该商品已下架</li>
+                        {% endif %}
+                        <li class="clearfix"></li>
+                    </ul>
+                </form>
+			</div>
+			<div class="clearfix"></div>
+		</footer>
+		<div class="style-modal">
+			<div class="modal-heading">
+				<span class="inner-price">￥<span>{% if dis_price %}{{ dis_price }}{% else %}{{ goods.price }}{% endif %}</span></span>
+                <span class="stocks">库存：<span>{{ goods.get_imgs.0.get_stocks }}</span></span>
+				<div class="goods-img"><img src="{{ MEDIA_URL }}{{ goods.get_imgs.0.src }}" width="100%" /></div>
+				<div class="close">&times;</div>
+			</div>
+			<div class="modal-contain">
+				<ul>
+					<li class="choice">
+						<div class="main-item-title">已选</div>
+						<div class="main-item-right">
+							{% for p in goods.get_prop %}
+							<span class="goods-style">{{ p.detail_props }}</span>
+							{% endfor %}
+                            <span class="goods-num">1件</span>
+						</div>
+						<div class="clearfix"></div>
+					</li>
+                    {% for p in goods.get_props %}
+					<li class="style">
+						<div class="main-item-title">{{ p.prop }}</div>
+						<div class="main-item-right">
+							<ul>
+                                {% for s in p.detail_props %}
+								<li {% if s == p.detail_props.0 %}class="active"{% endif %}>{{ s }}</li>
+                                {% endfor %}
+							</ul>
+						</div>
+						<div class="clearfix"></div>
+					</li>
+                    {% endfor %}
+					<li class="num">
+						<div class="main-item-title">数量</div>
+						<div class="main-item-right">
+							<div class="wan-spinner">
+								<a href="javascript:void(0)" class="minus">-</a>
+								<input type="text" value="1">
+								<a href="javascript:void(0)" class="plus">+</a>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="local-modal">
+			<div class="title">
+				<i class="icon iconfont icon-jtleft"></i>
+				配送至
+			</div>
+			<div class="local-modal-first">
+				<div class="modal-item active">
+					北京
+					<i class="icon iconfont icon-gou"></i>
+				</div>
+			</div>
+			<div class="local-modal-second none">
+				<div class="modal-item active">
+					朝阳区
+					<i class="icon iconfont icon-gou"></i>
+				</div>
+
+			</div>
+			<div class="local-modal-third none">
+				<div class="modal-item active">
+					三环到四环之间
+					<i class="icon iconfont icon-gou"></i>
+				</div>
+			</div>
+		</div>
+		<div class="shadow"></div>
+		<div class="shadow1"></div>
+        <div class="shadow2"></div>
+		<div class="to-top"><i class="icon iconfont icon-to_top"></i></div>
+        {% if is_active %}
+        <div class="share"><img width="66" src="{% static 'img/share.png' %}"> </div>
+        <div class="share-modal">
+            <div class="img"><img width="66" src="{% static 'img/share-point.png' %}"> </div>
+            <div class="content">
+                <p>立即分享推广给好友吧</p>
+                <p>点击屏幕右上角将本页面分享给好友</p>
+            </div>
+        </div>
+        {% endif %}
+		<div class="cart-modal none">
+			<div class="gou">
+				<i class="icon iconfont icon-gou1"></i>
+			</div>
+			<p>加入购物车成功</p>
+		</div>
+        {% if is_active %}
+        <div id="vRhRxvABvo" class="popup" ><div class="directseller-popup">
+          <div class="cancel-icon">X</div>
+
+            <div class="title">{% if promote %}分享后预计最高可赚取佣金 ￥{{ promote }}{% else %}请您前往代言人中心，填写邀请码{% endif %}</div>
+
+          <div class="desc">{% if promote %}朋友通过你分享的页面成功购买后，你可获得对应的佣金。佣金可在“会员中心-代言人中心”里查看{% else %}邀请码可由其他用户给与<br>诺没有邀请人，请填写 yihui{% endif %}</div>
+          {% if promote %}
+              <div class="icon-list">
+            <ul>
+
+                <li class="icon-wrap wx">
+                  <span class="icon">
+                    <img src="https://img.yzcdn.cn/public_files/2017/08/29/b2e228542c67919b211c00ca8dbfed97.png">
+                    <span class="icon-desc">
+                      微信
+                    </span>
+                  </span>
+                </li>
+
+                <li class="icon-wrap qrcode">
+                  <span class="icon">
+                    <img src="https://img.yzcdn.cn/public_files/2017/08/29/a187dc59cd1e615cea329439fedd2fde.png">
+                    <span class="icon-desc">
+                      二维码
+                    </span>
+                  </span>
+                </li>
+
+                <li class="icon-wrap invite-img">
+                  <span class="icon">
+                    <img src="https://img.yzcdn.cn/public_files/2017/08/29/2c62babaef58fea6f0f4e95e77c5b221.png">
+                    <span class="icon-desc">
+                      图文二维码
+                    </span>
+                  </span>
+                </li>
+
+            </ul>
+          </div>
+          {% endif %}
+          <div class="button"><a href="{% if promote %}{% url 'endorsement' %}{% else %}{% url 'invitation' %}{% endif %}">{% if promote %}我的代言人中心{% else %}填写邀请码{% endif %}</a></div>
+        </div>
+
+        </div>
+        <div class="erwei-model none">
+            <div class="img">
+                <img src="" alt="" />
+                <span class="close">X</span>
+                <p><img src="{% static 'img/zhiwen.png' %}" width="17"/> 长按图片保存至相册</p>
+            </div>
+		</div>
+        {% endif %}
+
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/swiper.jquery.min.js' %}"></script>
+	<script src="{% static 'js/wan-spinner.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	<script src="{% static 'js/detail.js' %}"></script>
+    {% if is_wx %}<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>{% endif %}
+    <script>
+        {% if is_wx %}
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: '{{ appid }}', // 必填，公众号的唯一标识
+                timestamp: {{ timestamp }}, // 必填，生成签名的时间戳
+                nonceStr: '{{ noncestr }}', // 必填，生成签名的随机串
+                signature: '{{ signature }}',// 必填，签名
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone'] // 必填，需要使用的JS接口列表
+            });
+            wx.ready(function(){
+                wx.onMenuShareTimeline({
+                    title: '[分享]{{ goods.name }}', // 分享标题
+                    link: location.href{% if is_active %}+'?iid={{ iid }}'{% endif %}, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: 'http://'+location.hostname+'{{ MEDIA_URL }}{{ goods.get_imgs.0.src }}', // 分享图标
+                    success: function () {
+                    // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                    }
+                });
+                wx.onMenuShareAppMessage({
+                    title: '[分享]{{ goods.name }}', // 分享标题
+                    desc: '手工刺绣，浑然天成', // 分享描述
+                    link: location.href{% if is_active %}+'?iid={{ iid }}'{% endif %}, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: 'http://'+location.hostname+'{{ MEDIA_URL }}{{ goods.get_imgs.0.src }}', // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    },
+                    cancel: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    }
+                });
+                wx.onMenuShareQQ({
+                    title: '[分享]{{ goods.name }}', // 分享标题
+                    desc: '手工刺绣，浑然天成', // 分享描述
+                    link: location.href{% if is_active %}+'?iid={{ iid }}'{% endif %}, // 分享链接
+                    imgUrl: 'http://'+location.hostname+'{{ MEDIA_URL }}{{ goods.get_imgs.0.src }}', // 分享图标
+                    success: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    },
+                    cancel: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    }
+                });
+                wx.onMenuShareWeibo({
+                    title: '[分享]{{ goods.name }}', // 分享标题
+                    desc: '手工刺绣，浑然天成', // 分享描述
+                    link: location.href{% if is_active %}+'?iid={{ iid }}'{% endif %}, // 分享链接
+                    imgUrl: 'http://'+location.hostname+'{{ MEDIA_URL }}{{ goods.get_imgs.0.src }}', // 分享图标
+                    success: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    },
+                    cancel: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    }
+                });
+                wx.onMenuShareQZone({
+                    title: '[分享]{{ goods.name }}', // 分享标题
+                    desc: '手工刺绣，浑然天成', // 分享描述
+                    link: location.href{% if is_active %}+'?iid={{ iid }}'{% endif %}, // 分享链接
+                    imgUrl: 'http://'+location.hostname+'{{ MEDIA_URL }}{{ goods.get_imgs.0.src }}', // 分享图标
+                    success: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    },
+                    cancel: function () {
+                        $('.share-modal').hide();
+		                $('.share').show();
+                    }
+                });
+            });
+        {% endif %}
+        $(function () {
+            $(".wan-spinner").WanSpinner({
+                maxValue: {{ goods.get_imgs.0.get_stocks }},
+                minValue: 1,
+                inputWidth: 34,
+                valueChanged: function(element, val) {
+                    $('.goods-num').text(val+'件');
+                    $('.inner-price span').text((parseFloat(price)*val).toFixed(2));
+                    $('#detailForm').find('input').eq(1).val(val);
+                }
+            });
+            {% if is_active %}
+            $('.follow').click(function () {
+                var $_t = $(this);
+                $.get('',{follow:'change'},function () {
+                    var $_cart_modal = $('.cart-modal');
+                    var txt = ($_t.parent().hasClass('active'))?'取消关注成功':'关注本商品成功';
+                    $_cart_modal.find('p').text(txt).end().fadeIn();
+                    $_t.parent().toggleClass('active');
+                    window.setTimeout(function(){
+                        $_cart_modal.fadeOut();
+                    },1000);
+                });
+            });
+            {% endif %}
+            $('.cancel-icon').click(function () {
+                $('.popup').css('bottom', "-{% if promote %}286{% else %}204{% endif %}px");
+                setTimeout(function () {
+                    $('.shadow2').hide();
+                    $('.share').show();
+                }, 300)
+            });
+            $('.shadow2').click(function () {
+                $('.popup').css('bottom', "-{% if promote %}286{% else %}204{% endif %}px");
+                setTimeout(function () {
+                    $('.shadow2').hide();
+                    $('.share').show();
+                }, 300)
+            });
+            $('.wx').click(function () {
+                $('.popup').css('bottom', "-{% if promote %}286{% else %}204{% endif %}px");
+                setTimeout(function () {
+                    $('.shadow2').hide();
+                    $('.share-modal').show();
+                }, 300)
+            });
+            $('.qrcode').click(function(){
+                $.get('',{img:'qrcode'},function(data){
+                    $('.erwei-model .img>img').attr('src', data.img_url);
+                    $('.popup').css('bottom', "-{% if promote %}286{% else %}204{% endif %}px");
+                    setTimeout(function () {
+                        $('.shadow2').hide();
+                        $('.erwei-model').show();
+                    }, 300)
+                });
+            });
+            $('.tuwen').click(function(){
+                $.get('',{img:'tuwen'},function(data){
+                    $('.erwei-model .img>img').attr('src', data.img_url);
+                    $('.popup').css('bottom', "-{% if promote %}286{% else %}204{% endif %}px");
+                    setTimeout(function () {
+                        $('.shadow2').hide();
+                        $('.erwei-model').show();
+                    }, 300)
+                });
+            });
+        });
+
+    </script>
+</html>

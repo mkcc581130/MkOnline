@@ -1,0 +1,117 @@
+#orderHeader{
+	height: 44px;
+	border-bottom: 1px solid #d7d7d7;
+	width: 100%;
+	background: #efefef url(../img/nav-bg.png) repeat-x 0 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 20;
+	padding-left: 40px;
+	padding-right: 48px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.heading{
+	position: fixed;
+	top: 44px;
+	left: 0;
+	height: 43px;
+	width: 100%;
+	z-index: 15;
+	line-height: 43px;
+	background-color: #fff;
+}
+.heading li{
+	width: 25%;
+	text-align: center;
+	float: left;
+}
+.heading li a{
+	color: #9a9a9a;
+}
+.heading li.active a{
+	color: #f15353;
+	font-weight: bold;
+	border-bottom: 2px solid #f15353;
+	padding-bottom: 11px;
+}
+.order-heading{
+	position: relative;
+	width: 100%;
+	height: 43px;
+	font-size: .14rem;
+	line-height: 42px;
+	background-color: #fff;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+
+.order-heading i{
+	color: #f15353;
+}
+.order-heading .pull-right{
+	color: #F15353;
+	margin-right: 5px;
+}
+.swiper-container{
+	margin-top: 97px;
+}
+.order-main{
+	width: 100%;
+	padding: 15px 10px;
+	background-color: #f8f8f8;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.order-main a{
+	color: #252525;
+	display: inline-block;
+	width: 100%;
+}
+
+.order-main p{
+	display: inline-block;
+	width: 68%;
+	margin-left: 10px;
+}
+.order-bottom{
+	position: relative;
+	width: 100%;
+	/*height: 43px;*/
+	font-size: .14rem;
+	/*line-height: 42px;*/
+	background-color: #fff;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+}
+.order-bottom span{
+	line-height: 31px;
+}
+.order-bottom a{
+	display: inline-block;
+	border: 1px solid #f15353;
+	float: right;
+	color: #fff;
+	line-height: normal;
+	padding: 5px;
+	text-align: center;
+	margin-left: 8px;
+	border-radius: 3px;
+	min-width: 66px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background-color: #f15353;
+}
+
+.order-bottom a.express{
+	border-color: #0083ee;
+	background-color: #0083ee;
+}
+@media only screen and (max-width:320px ) {
+	.order-main img{
+		width: 55px;
+	}
+}

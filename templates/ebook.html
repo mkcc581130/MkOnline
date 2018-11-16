@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<title>润家润联合控股产品介绍书</title>
+	<style type="text/css">
+		p{
+			margin: 0;
+		}
+		body{
+			box-sizing: border-box;
+			margin: 0;
+			position: relative;
+			font-family: "微软雅黑";
+		}
+		.previousPage{
+			position: fixed;
+			bottom: 5px;
+			left: 10px;
+			z-index: 10000;
+			opacity: .5;
+		}
+		.nextPage{
+			position: fixed;
+			bottom: 5px;
+			right: 10px;
+			z-index: 10000;
+			opacity: .5;
+		}
+		.return{
+			position: fixed;
+			top: 10px;
+			left: 10px;
+			z-index: 10000;
+			opacity: .5;
+		}
+		.number{
+			position: fixed;
+			top: 49%;
+			left: 47%;
+			z-index: 10000;
+			opacity: .5;
+		}
+		.contents{
+			background-color: #FFFFFF;
+			color: #565656;
+		}
+		.contents .title{
+			padding-left: 100px;
+			padding-top: 65px;
+            background-color: #c5deda;
+		}
+		.contents .title .en{
+			font-size: 24px;
+		}
+		.contents .title .ch{
+			font-size: 40px;
+			line-height: 44px;
+			font-weight: 100;
+			padding-bottom: 20px;
+		}
+		.main{
+			padding: 0 110px;
+		}
+		.main p{
+			padding-top: 13px;
+			padding-bottom: 10px;
+			border-bottom: 2px solid #eee;
+			line-height: 70px;
+			font-size: 30px;
+		}
+		@media only screen and (max-width: 374px) {
+			.contents .title .en{
+				font-size: 20px;
+			}
+			.contents .title .ch{
+				font-size: 30px;
+				line-height: 32px;
+			}
+			.contents .title{
+				padding-left: 80px;
+				padding-top: 30px;
+				
+			}
+			.main{
+				padding: 0 90px;
+			}
+			.main p{
+				padding-top: 10px;
+			}
+		}
+        .goods{
+            background-color: #fff;
+        }
+        .goods .title{
+            float: left;
+            width: 34%;
+            background-color: #c5deda;
+        }
+        .goods .title .title-main{
+            margin-top: 100px;
+            background-color: #fff;
+            position: relative;
+
+        }
+        .goods .title .title-main .fashion{
+            font-size: 76px;
+            color: rgba(0,0,0,.1);
+            position: absolute;
+            top: -45px;
+            right: -51px;
+        }
+        .goods .title .title-main .name{
+            font-size: 36px;
+            position: absolute;
+            top: 15px;
+            right: -77px;
+        }
+        .goods .img{
+            float: left;
+            width: 66%;
+            background-color: #c5deda;
+            margin-top: 100px;
+            padding: 0 100px 100px 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .goods .img img{
+            width: 100%;
+            background-color: #fff;
+            display: inline-block;
+            padding: 10px;
+        }
+        .left{
+            float: left;
+            width: 50%;
+        }
+        .intr{
+            background-color: #fff;
+        }
+        .intr .img{
+            width: 39%;
+            float: left;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .intr .img img{
+            width: 100%;
+        }
+        .intr .main{
+            float: left;
+            width: 61%;
+            padding: 40px 20px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .intr .main .title{
+            font-size: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .intr .main p{
+            font-size: 18px;
+            font-weight: normal;
+            line-height: 24px;
+            text-indent: 36px;
+            padding: 16px 0;
+            margin-bottom: 10px;
+        }
+	</style>
+</head>
+
+<body>
+	<div class="shade">
+		<div class="sk-fading-circle">
+			<div class="sk-circle1 sk-circle"></div>
+			<div class="sk-circle2 sk-circle"></div>
+			<div class="sk-circle3 sk-circle"></div>
+			<div class="sk-circle4 sk-circle"></div>
+			<div class="sk-circle5 sk-circle"></div>
+			<div class="sk-circle6 sk-circle"></div>
+			<div class="sk-circle7 sk-circle"></div>
+			<div class="sk-circle8 sk-circle"></div>
+			<div class="sk-circle9 sk-circle"></div>
+			<div class="sk-circle10 sk-circle"></div>
+			<div class="sk-circle11 sk-circle"></div>
+			<div class="sk-circle12 sk-circle"></div>
+		</div>
+		<div class="number"></div>
+	</div>
+	<div class="flipbook-viewport" style="">
+		<!--<div class="previousPage"><img src="img/jt1.png" width="58"/></div>
+		<div class="nextPage"><img src="img/jt2.png" width="58"/></div>-->
+		
+		<div class="return"><img src="{% static 'img/zhuanjt.png' %}" width="40"/></div>
+		<div class="container">
+			<div class="flipbook">
+				<div id="first" style="background:url({% static 'img/1-1.jpg' %}) center top no-repeat #fff;background-size:contain"></div>
+				<div class="contents">
+                    <div class="left">
+                        <img src="{% static 'img/mulu.jpg' %}" alt="" width="100%" >
+                    </div>
+                    <div class="left">
+                        <div class="title">
+                            <p class="en">C O N T E N T S</p>
+                            <p class="ch">目录</p>
+                        </div>
+                        <div class="main">
+                            <p class="intr">公司简介</p>
+                            <p class="asd">服装服饰</p>
+                            <p class="teatool">生活家居</p>
+                            <p class="bed">创意礼品</p>
+                            <p class="wine">艺术品</p>
+                        </div>
+                    </div>
+
+				</div>
+                <div class="intr">
+                    <div class="img">
+                        <img src="{% static 'img/intr.png' %}" alt="" >
+                    </div>
+                    <div class="main">
+                        <div class="title"><img src="{% static 'img/yihui-title.jpg' %}" alt="" ></div>
+                        <div class="content">
+                            <p>“一慧文创丝绣艺术” 为企业旗下丝绸刺绣文创品牌 ，创立品牌的同时得益于企业多年执着于保护与创新传承本土地域绣种技艺与文化的理念，以及近20年华东区最强劲的丝绣创新产研体系及产研中心等技术力量支撑。
+                            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此外，“一慧文创丝绣艺术”拥有横跨丝绣艺术配饰，艺术生活家居，艺术创意礼品三大产品线。</p>
+                            <p>"Yihui Creativity Silk & Embroidery Art" is a brand of us. The brand is benefitted from years of preservation and innovation on local embroidery culture, 20 years of devotion to develop the embroidery industrial chain catering to changing trends and under the technical supports from the best innovative R & D system and institutions in eastern China region. Thus, "Yihui Creativity Silk & Embroidery Art" can stretch over silk and embroidery accessories, home furniture and gifts, as well as several cultural categories on internet shopping sub-brands.</p>
+                        </div>
+                    </div>
+                </div>
+                {% for g in goods %}
+                    {% for i in g.images_set.all %}
+                    <div class="goods">
+                        <div class="title">
+                            <div class="title-main">
+                                <p class="fashion">FASHION</p>
+                                <p class="name">{{ g.name }}</p>
+                            </div>
+
+                        </div>
+                        <div class="img">
+                            <img src="{{ MEDIA_URL }}{{ i.src }}" alt="">
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+			</div>
+		</div>
+	</div>
+	<audio id='audioPlay' src='{% static 'media/turn_page.wav' %}' hidden='true'></audio>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/modernizr-2.6.2.min.js' %}"></script>
+	<script src="{% static 'js/turn.js' %}"></script>
+	<script src="{% static 'js/fanye.js' %}"></script>
+</body>
+
+</html>

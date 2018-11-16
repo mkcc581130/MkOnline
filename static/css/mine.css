@@ -1,0 +1,221 @@
+#mineHeader{
+	height: 44px;
+	border-bottom: 1px solid #d7d7d7;
+	width: 100%;
+	background: #efefef url(/static/img/nav-bg.png) repeat-x 0 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 20;
+	padding-left: 40px;
+	padding-right: 48px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.my-heading{
+	padding: 10px 10px 0 10px;
+	margin-top: 44px;
+}
+.heading{
+	width: 100%;
+	height: 94px;
+	overflow: hidden;
+    position: relative;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #fff;
+    background: -webkit-linear-gradient(left,#eb3c3c,#ff7459);
+    background: linear-gradient(90deg,#eb3c3c,#ff7459);
+    box-shadow: 0 2px 5px rgba(255,98,98,.4);
+}
+.heading-img{
+	width: 56px;
+	height: 56px;
+	border-radius: 28px;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: top;
+	margin: 19px 0 0 14px;
+}
+.heading-info{
+	display: inline-block;
+	padding-left:14px;
+	color: #fff;
+}
+.heading-info .heading-name{
+	margin-top: 18px;
+    margin-bottom: 12px;
+    font-size: .16rem;
+}
+.heading-info .heading-level{
+	font-size: .13rem;
+}
+.heading-logout{
+	position: absolute;
+	top: 40px;
+	right: 10px;
+	text-align: center;
+}
+.heading-logout a{
+	color: #fff;
+}
+.heading-logout a i{
+	font-size: .14rem;
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	margin-bottom: 8px;
+	/*vertical-align: top;*/
+	line-height: 20px;
+}
+.order-heading,.follow-heading, .cash-heading{
+	position: relative;
+	width: 100%;
+	height: 43px;
+	font-size: .14rem;
+	line-height: 42px;
+	background-color: #fff;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+.order-heading a,.follow-heading a,.endo-heading a,.cash-heading a{
+	color: #252525;
+	display: inline-block;
+	width: 100%;
+}
+.order-heading a>i{
+	color: #ffc800;
+	margin-right: 4px;
+}
+.endo-heading a>i{
+	color: #429bcf;
+	margin-right: 4px;
+}
+.follow-heading a>i{
+	color: #ef627a;
+	margin-right: 4px;
+}
+.cash-heading a>i{
+	color: #56d74e;
+	margin-right: 4px;
+}
+.order-heading p,.follow-heading p,.endo-heading p,.cash-heading p{
+	float: right;
+	color: #848689;
+	vertical-align: middle;
+}
+/*.order-heading p>i,.follow-heading p>i{*/
+	/*vertical-align: middle;*/
+/*}*/
+.order-main{
+	width: 100%;
+	height: 60px;
+	background-color: #fff;
+	margin-top: 1px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-top: 6px;
+	
+}
+.order-main li{
+	float: left;
+	width: 33.3%;
+	text-align: center;
+}
+.order-main li a{
+	color: #232326;
+}
+.order-main li a i{
+	font-size: .24rem;
+	color: #666;
+}
+.wallet-heading{
+	position: relative;
+	width: 100%;
+	height: 43px;
+	font-size: .14rem;
+	line-height: 42px;
+	background-color: #fff;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+.wallet-heading>i{
+	color: #ff7e45;
+	margin-right: 4px;
+}
+.wallet-main{
+	width: 100%;
+	height: 60px;
+	background-color: #fff;
+	margin-top: 1px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-top: 12px;
+	
+}
+.wallet-main li{
+	float: left;
+	width: 33.3%;
+	text-align: center;
+}
+.wallet-main li a{
+	color: #232326;
+}
+.wallet-main li a i{
+	font-size: .24rem;
+	color: #666;
+}
+.wallet-main li a p{
+	margin-bottom: 3px;
+}
+.wallet-main li a p:first-child{
+	font-size: .15rem;
+}
+
+.endo-heading{
+	position: relative;
+	width: 100%;
+	height: 43px;
+	font-size: .14rem;
+	line-height: 42px;
+	background-color: #fff;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+.endo-main{
+	width: 100%;
+	background-color: #fff;
+	margin-top: 1px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-top: 12px;
+	overflow: auto;
+}
+.endo-main li{
+	float: left;
+	width: 33.3%;
+	text-align: center;
+}
+.endo-main li a{
+	color: #232326;
+}
+.endo-main li a i{
+	font-size: .24rem;
+	color: #666;
+}
+.endo-main li a p{
+	margin-bottom: 15px;
+	margin-top: 5px;
+}
+.endo-main li a p:first-child{
+	font-size: .15rem;
+}
+.icon-erweima{
+	font-size: 30px;
+	background: linear-gradient(to right, #f9d348, #dea83d);
+	margin-bottom: 8px;
+    display: inline-block;
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="x-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/express.css' %}" />
+		<title>订单详情</title>
+	</head>
+	<body>
+		<header id="expressHeader">
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">物流信息</p>
+		</header>
+		<div id="J_oper_plugin">
+			<div class="logis-info">
+				<p> 物流公司 {{ order.express_com }} </p>
+				<p> 运单号码 {{ order.express_num }} </p>
+                <p class="state"> 物流状态 </p>
+			</div>
+			<div class="logis-detail">
+				<ul>
+
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	<script>
+        function addZero(num) {
+            if(num>=0 && num<=9){
+                return '0'+num;
+            }else{
+                return num;
+            }
+        }
+        (function () {
+            var em = JSON.parse("{{ express }}".replace(/&quot;/g,'"'));
+            var traces = em.Traces;
+            var date_day,cls;
+            var $_html = $(document.createElement('li'));
+            var state = em.State;
+            if (state == 2){
+                $('.state').text('物流状态 运输中');
+            }else if(state == 3){
+                $('.state').text('物流状态 已签收');
+            }else{
+                $('.state').text('物流状态 问题件');
+            }
+            for(var i = traces.length-1;i>=0;i--){
+                var date = new Date(traces[i].AcceptTime);
+                var now_date = new Date();
+                var get_date = date.getDate();
+                var station = traces[i].AcceptStation;
+                var hm = addZero(date.getHours())+':'+addZero(date.getMinutes());
+                (i == traces.length-1)?cls='logis-detail-d logis-detail-first':cls='logis-detail-d';
+                if(get_date != date_day){
+                    date_day = get_date;
+                    if($_html != $(document.createElement('li'))) $('.logis-detail ul').append($_html);
+                    if(now_date.getFullYear()==date.getFullYear()){
+                        if(now_date.getMonth()==date.getMonth()){
+                            if(now_date.getDate()==date_day){
+                                $_html.append('<p class="logis-detail-date">今天</p><div class="'+cls+'"><div class="logis-detail-content"><p class="logis-detail-content-time">'+hm+'</p><p class="logis-detail-content-detail">'+station+'</p></div></div>');
+                            }else if(now_date.getDate()-date_day==1){
+                                $_html.append('<p class="logis-detail-date">昨天</p><div class="'+cls+'"><div class="logis-detail-content"><p class="logis-detail-content-time">'+hm+'</p><p class="logis-detail-content-detail">'+station+'</p></div></div>');
+                            }else if(now_date.getDate()-date_day==2){
+                                $_html.append('<p class="logis-detail-date">前天</p><div class="'+cls+'"><div class="logis-detail-content"><p class="logis-detail-content-time">'+hm+'</p><p class="logis-detail-content-detail">'+station+'</p></div></div>');
+                            }else{
+                                $_html.append('<p class="logis-detail-date">'+(date.getMonth()+1)+'-'+date_day+'</p><div class="'+cls+'"><div class="logis-detail-content"><p class="logis-detail-content-time">'+hm+'</p><p class="logis-detail-content-detail">'+station+'</p></div></div>');
+                            }
+                        }else{
+                            $_html.append('<p class="logis-detail-date">'+(date.getMonth()+1)+'-'+date_day+'</p><div class="'+cls+'"><div class="logis-detail-content"><p class="logis-detail-content-time">'+hm+'</p><p class="logis-detail-content-detail">'+station+'</p></div></div>');
+                        }
+                    }else{
+                        $_html.append('<p class="logis-detail-date">'+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date_day+'</p><div class="'+cls+'"><div class="logis-detail-content"><p class="logis-detail-content-time">'+hm+'</p><p class="logis-detail-content-detail">'+station+'</p></div></div>');
+                    }
+                }else{
+                    $_html.append('<div class="logis-detail-d"><div class="logis-detail-content"><p class="logis-detail-content-time">'+hm+'</p><p class="logis-detail-content-detail">'+station+'</p></div></div>');
+                }
+                if(i == 0) $('.logis-detail ul').append($_html);
+            }
+        })();
+    </script>
+</html>

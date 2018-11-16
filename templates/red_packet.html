@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="x-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/csshake.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/red_packet.css' %}" />
+		<title>红包领取页</title>
+	</head>
+	<body>
+        <!-- 红包 -->
+        <div class="red"><!-- shake-chunk -->
+            <span class="back" style=""></span>
+            <button class="redbutton" type="领取红包">拆红包</button>
+            <div class="red-jg">
+                <h1>0.5元现金红包</h1>
+                <h5>已放入您的红包账户</h5>
+            </div>
+        </div>
+        <!-- End 红包 -->
+        <!-- 按钮 -->
+        <div class="t-btn none">
+            <button><a href="{% url 'mine' %}">立即查看</a></button>
+        </div>
+        <!-- End 按钮 -->
+
+    </body>
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            // 点击redbutton按钮时执行以下全部
+            $('.redbutton').click(function(){
+                // 在带有red样式的div中添加shake-chunk样式
+                $.get('',{action:'receive'},function (data) {
+                    if(data.status == 'success'){
+                        $('.red').addClass('shake-chunk');
+                        // 点击按钮2000毫秒后执行以下操作
+                        setTimeout(function(){
+                            // 在带有red样式的div中删除shake-chunk样式
+                            $('.red').removeClass('shake-chunk');
+                            // 将redbutton按钮隐藏
+                            $('.redbutton').hide();
+                            // 修改red 下 span   背景图
+                            $('.red > span').css("background-image" , "url(/static/img/red-y.png)");
+                            // 修改red-jg的css显示方式为块
+                            $('.red-jg').find('h1').text(data.red_packet + '元现金红包').end().show();
+                            $('.t-btn').show();
+                        },2000);
+                    }else{
+                        zeroModal.alert({
+                            content: data.warning,
+                            width:'80%',
+                            height:'260px'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</html>

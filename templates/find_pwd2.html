@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+		<title>商品详情</title>
+	</head>
+
+	<body>
+		<header id="loginHeader">
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">{% if status == 'find' %}找回{% else %}修改{% endif %}密码</p>
+		</header>
+		<section class="find-main">
+			<div class="find-second">
+				<form id="findPwd2Form" action="" method="post">
+                    {% csrf_token %}
+					<div class="form-group form-group-tel">
+						<input type="tel" name="verify" id="findTel" placeholder="请输入收到的验证码" />
+						<button type="button">重新发送120(s)</button>
+						<i class="icon iconfont icon-cha"></i>
+					</div>
+					<div class="form-group">
+						<input type="password" name="password" id="findPassword" placeholder="请设置6-20位登录密码" />
+						<i class="icon iconfont icon-cha"></i>
+					</div>
+					<div class="form-group">
+						<input type="password" id="findPassword2" placeholder="请再次输入密码" />
+						<i class="icon iconfont icon-cha"></i>
+					</div>
+					<div class="error-info {% if msg %}{% else %}none{% endif %}">
+						<i class="icon iconfont icon-jian"></i> <span>{% if msg %}{{ msg }}{% endif %}</span>
+					</div>
+					<a class="btn" href="{% url 'find_pwd1' %}{{ status }}" id="findBackSub">上一步</a>
+					<a class="btn" id="findSecondSub">完 成</a>
+				</form>
+			</div>
+		</section>
+        <div class="jump-modal none">
+			<div class="jump">
+				<i class="icon iconfont icon-loading"></i>
+			</div>
+			<p>密码{% if status == 'find' %}找回{% else %}修改{% endif %}成功，即将跳转</p>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/login.js' %}"></script>
+    <script>
+        {% if msg %}
+            $('.find-second').find('button').text('发送验证码').css('background-color','#f23030').css('color','#fff');
+        {% else %}
+        (function() {
+            var sec = 119;
+            var inter;
+            inter = window.setInterval(function(){
+                if(sec>0){
+                    $('.find-second').find('button').text('重新发送'+sec + '(s)');
+                    sec -= 1;
+                }else{
+                    window.clearInterval(inter);
+                    $('.find-second').find('button').text('重新发送').css('background-color','#f23030').css('color','#fff');
+
+                }
+            },1000);
+        })();
+        {% endif %}
+    </script>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/delivery_change.css' %}" />
+		<title>编辑收货地址</title>
+	</head>
+	<body>
+		<header id="deliveryHeader">
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">{% if method == 'edit' %}编辑{% else %}添加{% endif %}收货地址</p>
+			{% if method == 'edit' %}<p class="nav-delete">删除</p>{% endif %}
+		</header>
+		<div class="main">
+			<section>
+				<form action="" method="post" id="deliveryChangeForm">
+                    {% csrf_token %}
+					<div class="form-group">
+						收 货 人 ：<input type="text" name="recipient" placeholder="请输入收货人姓名" value="{{ address.recipient }}"/>
+					</div>
+					<div class="form-group">
+						手机号码：<input type="text" name="tel" placeholder="请输入收货人手机号" value="{{ address.tel }}"/>
+					</div>
+					<div class="form-group form-group-locate">
+                        <input type="hidden" name="provinces" value="{{ address.provinces_id }}">
+                        <input type="hidden" name="cities" value="{{ address.cities_id }}">
+                        <input type="hidden" name="areas" value="{{ address.areas_id }}">
+						所在地区：<span>{{ address.provinces }}</span> <span>{{ address.cities }}</span> <span>{{ address.areas }}</span> <i class="icon iconfont icon-jtright pull-right"></i>
+					</div>
+					<div class="form-group">
+						详细地址：<input type="text" name="detail" placeholder="请输入收货详细地址" value="{{ address.detail }}"/>
+					</div>
+					<div class="form-group">
+						默认地址 <input type="checkbox" id="checkbox" name="default" value="1" class="none" {% if address.default %}checked{% endif %} /> <label for="checkbox"><i></i></label>
+					</div>
+					<a class="save">保存收货地址</a>
+				</form>
+			</section>
+		</div>
+		<div class="local-modal">
+			<div class="title">
+				<i class="icon iconfont icon-jtleft"></i>
+				配送至
+			</div>
+			<div class="local-modal-first">
+				{% for p in provinces %}
+				<div class="modal-item {% if p == address.provinces %}active{% endif %}" data-id = "{{ p.id }}">
+					{{ p.name }}
+				</div>
+				{% endfor %}
+			</div>
+			<div class="local-modal-second none"></div>
+			<div class="local-modal-third none"></div>
+		</div>
+		<div class="shadow"></div>
+        <div class="jump-modal none">
+			<div class="jump">
+				<i class="icon iconfont icon-loading"></i>
+			</div>
+			<p>删除收货地址成功</p>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/zeroModal.min.js' %}"></script>
+	<script src="{% static 'js/delivery_change.js' %}"></script>
+    <script>
+        $('.save').click(function () {
+            var i = true;
+            $('input').each(function () {
+                if($(this).val() == ''){
+                    zeroModal.alert({
+                        content:'仍然有未填写项！',
+                        width:'80%',
+                        height:'260px'
+                    });
+                    i = false;
+                    return false;
+                }
+            });
+            if(/^1[34578]\d{9}$/.test($("input[name='tel']").val()) && i){
+                $.ajax({
+                    type:'post',
+                    url:'',
+                    data:$('#deliveryChangeForm').serialize(),
+                    success:function (data) {
+                        if(data.msg == 'success'){
+                            $('.jump-modal').find('p').text('{% if method == 'edit' %}编辑{% else %}添加{% endif %}收货地址成功，即将跳转').end().removeClass('none');
+                            setTimeout(function () {
+                                window.location.replace(document.referrer);
+                            },1000);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</html>

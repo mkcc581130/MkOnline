@@ -1,0 +1,248 @@
+ <!DOCTYPE html>
+ {% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/order.css' %}" />
+		<title>我的订单</title>
+	</head>
+
+	<body>
+		<header id="orderHeader">
+			
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">我的订单</p>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li class="active">
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<section class="heading">
+			<ul>
+				<li class="active"><a href="javascript:void(0);">
+					全部
+				</a></li>
+				<li><a href="javascript:void(0);">
+					待付款
+				</a></li>
+				<li><a href="javascript:void(0);">
+					待收货
+				</a></li>
+				<li><a href="javascript:void(0);">
+					已完成 
+				</a></li>
+			</ul>
+		</section>
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide all">
+					{% for o in order %}
+					<section class="order">
+						<div class="order-heading">
+							<i class="icon iconfont icon-dingdan1"></i> <span>订单号：{{ o.oid }}</span>
+							<p class="pull-right">{{ o.get_status_display }}</p>
+						</div>
+						<div class="order-main">
+							<a href="{% url 'order_detail' o.oid %}">
+                            {% if o.get_order_goods_num == 1 %}
+                                <img src="{{ MEDIA_URL }}{{ o.get_order_goods.image }}" width="59"/>
+                                <p>{{ o.get_order_goods.goods }}</p>
+                            {% else %}
+                                {% for i in o.get_order_goods %}
+                                    <img src="{{ MEDIA_URL }}{{ i.image }}" width="59"/>
+                                {% endfor %}
+                            {% endif %}
+							</a>
+						</div>
+						<div class="order-bottom">
+							<span>实付款：￥{{ o.paid }}</span>
+							{% if o.status == 0 %}<a href="{% url 'pay' o.oid %}">去付款</a>{% elif  o.status == 1 or o.status == 2  %}<a class="remind-delivery" data-id="{{ o.oid }}">提醒发货</a>{% elif  o.status == 3  %}<a class="confirm-delivery" data-id="{{ o.oid }}">确认收货</a> <a class="express" href="{% url 'express' o.oid %}">查看物流</a>{% elif  o.status == 3  %}<a href="cart_commit.html">再次购买</a>{% elif  o.status == 4  %}<a href="cart_commit.html">已关闭</a>{% elif  o.status == 5  %}<a href="cart_commit.html">查看退款</a>{% endif %}
+						    <div class="clearfix"></div>
+                        </div>
+					</section>
+                    {% endfor %}
+				</div>
+
+				<div class="swiper-slide paying">
+                {% for o in order %}
+                    {% if o.status == 0 %}
+                    <section class="order">
+                        <div class="order-heading">
+                            <i class="icon iconfont icon-dingdan1"></i> <span>订单号：{{ o.oid }}</span>
+                            <p class="pull-right">待付款</p>
+                        </div>
+                        <div class="order-main">
+                            <a href="{% url 'order_detail' o.oid %}">
+                            {% if o.get_order_goods_num == 1 %}
+                                <img src="{{ MEDIA_URL }}{{ o.get_order_goods.image }}" width="59"/>
+                                <p>{{ o.get_order_goods.goods }}</p>
+                            {% else %}
+                                {% for i in o.get_order_goods %}
+                                    <img src="{{ MEDIA_URL }}{{ i.image }}" width="59"/>
+                                {% endfor %}
+                            {% endif %}
+							</a>
+                        </div>
+                        <div class="order-bottom">
+                            <span>实付款：￥{{ o.paid }}</span>
+                            <a href="{% url 'pay' o.oid %}">去支付</a>
+                            <div class="clearfix"></div>
+                        </div>
+                    </section>
+                    {% endif %}
+                {% endfor %}
+				</div>
+				<div class="swiper-slide delivery">
+                {% for o in order %}
+					{% if o.status >= 1 and o.status <= 3 %}
+                    <section class="order">
+                        <div class="order-heading">
+                            <i class="icon iconfont icon-dingdan1"></i> <span>订单号：{{ o.oid }}</span>
+                            <p class="pull-right">{{ o.get_status_display }}</p>
+                        </div>
+                        <div class="order-main">
+                            <a href="{% url 'order_detail' o.oid %}">
+                            {% if o.get_order_goods_num == 1 %}
+                                <img src="{{ MEDIA_URL }}{{ o.get_order_goods.image }}" width="59"/>
+                                <p>{{ o.get_order_goods.goods }}</p>
+                            {% else %}
+                                {% for i in o.get_order_goods %}
+                                    <img src="{{ MEDIA_URL }}{{ i.image }}" width="59"/>
+                                {% endfor %}
+                            {% endif %}
+							</a>
+                        </div>
+                        <div class="order-bottom">
+                            <span>实付款：￥{{ o.paid }}</span>
+                            {% if o.status == 3 %}<a class="confirm-delivery" data-id="{{ o.oid }}">确认收货</a><a class="express" href="{% url 'express' o.oid %}">查看物流</a>{% else %}<a class="remind-delivery" data-id="{{ o.oid }}">提醒发货</a>{% endif %}
+                            <div class="clearfix"></div>
+                        </div>
+                    </section>
+                    {% endif %}
+                {% endfor %}
+				</div>
+				<div class="swiper-slide complete">
+                {% for o in order %}
+					{% if o.status == 3 %}
+                    <section class="order">
+                        <div class="order-heading">
+                            <i class="icon iconfont icon-dingdan1"></i> <span>订单号：{{ o.oid }}</span>
+                            <p class="pull-right">已完成</p>
+                        </div>
+                        <div class="order-main">
+                            <a href="{% url 'order_detail' o.oid %}">
+                            {% if o.get_order_goods_num == 1 %}
+                                <img src="{{ MEDIA_URL }}{{ o.get_order_goods.image }}" width="59"/>
+                                <p>{{ o.get_order_goods.goods }}</p>
+                            {% else %}
+                                {% for i in o.get_order_goods %}
+                                    <img src="{{ MEDIA_URL }}{{ i.image }}" width="59"/>
+                                {% endfor %}
+                            {% endif %}
+							</a>
+                        </div>
+                        <div class="order-bottom">
+                            <span>实付款：￥{{ o.paid }}</span>
+                            <a href="pay.html">再次购买</a>
+                            <div class="clearfix"></div>
+                        </div>
+                    </section>
+                    {% endif %}
+                {% endfor %}
+				</div>
+			</div>
+		</div>
+		
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/swiper.jquery.min.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+    <script>
+        $(function(){
+            $('.swiper-wrapper').css('min-height',$(window).height()-97+'px');
+            var mySwipers = new Swiper('.swiper-container', {
+                autoHeight: true,
+                onSlideChangeEnd: function(swiper){
+                    $('.heading li').eq(swiper.activeIndex).addClass('active').siblings().removeClass('active');
+                }
+            });
+            $('.heading').on('click','li',function(){
+                var $_t = $(this);
+                if(!$_t.hasClass('active')){
+                    $_t.addClass('active').siblings().removeClass('active');
+                    mySwipers.slideTo($_t.index());
+                }
+            });
+            $('.heading li').eq({{ index }}).click();
+            $('.remind-delivery').click(function () {
+                var $_t = $(this);
+                $.get('/order_detail/',{'remind_id':$_t.data('id')},function (data) {
+                    if(data.msg == 'success'){
+                        zeroModal.success({
+                            content:'提醒发货成功!',
+                            width:'80%',
+                            height:'230px'
+                        });
+                    }
+                });
+            });
+            $('.confirm-delivery').click(function () {
+                var $_t = $(this);
+                zeroModal.confirm({
+                    content:'您确定要确认收货吗？',
+                    width:'80%',
+                    height:'260px',
+                    okFn:function(){
+                        $.get('/order_detail/',{'confirm_id':$_t.data('id')},function (data) {
+                            if(data.msg == 'success'){
+                                zeroModal.success({
+                                    content:'确认收货成功!',
+                                    width:'80%',
+                                    height:'230px',
+                                    okFn:function () {
+                                        location.replace('http://'+location.hostname+'/order/0');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+</html>

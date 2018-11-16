@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/wan-spinner.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/cart.css' %}" />
+		<title>购物车</title>
+	</head>
+
+	<body>
+		<header id="cartHeader">
+			
+			<div class="nav-back">
+				<a href="{% url 'index' %}"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">购物车</p>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li class="active">
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<div class="main">
+            {% if goods %}
+                <section class="cart-secure">
+                    <i class="icon iconfont icon-anquan"></i> 您正在安全的购物环境中，请放心购物
+                </section>
+                <section>
+                {% for g in goods %}
+                    <div class="cart-item">
+                        <div class="icon-outer active" data-id="{{ g.id }}">
+                            <i class="icon iconfont"></i>
+                        </div>
+                        <a href="{% url 'detail' g.image.goods_id %}"><img src="{{ MEDIA_URL }}{{ g.image.src }}" width="88"/></a>
+                        <div class="cart-content" data-id="{{ g.id }}">
+                            <a href="{% url 'detail' g.image.goods_id %}">
+                                <p class="title">{{ g.image.goods }}</p>
+                                <p class="style">{% for p in g.image.get_props %}{{ p.props }}: <span>{{ p.detail_props }}</span> {% endfor %}</p>
+                            </a>
+                            <div class="edit-style none" data-id="{{ g.id }}">
+                                <a href="javascipt:void(0);">{% for p in g.image.get_props %}{{ p.props }}: <span>{{ p.detail_props }}</span> {% endfor %} <i class="icon iconfont icon-jtbottom"></i></a>
+                            </div>
+                            <p class="price">￥<span>{{ g.image.goods.price|int_price }}</span>{{ g.image.goods.price|dec_price }}</p>
+                            <div class="wan-spinner" data-id="{{ g.id }}">
+                                <a href="javascript:void(0)" class="minus">-</a>
+                                <input type="text" value="{{ g.number }}">
+                                <a href="javascript:void(0)" class="plus">+</a>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="cart-bottom">
+                            <span data-id="{{ g.image.goods_id }}" class="edit"><i>|</i> 编辑</span> <span class="after none"><span data-id="{{ g.id }}" class="delete">删除</span> <i>|</i> <span class="complete">完成</span></span>
+                        </div>
+                    </div>
+                {% endfor %}
+                </section>
+            {% else %}
+			<section class="cart-nothing">
+				<i class="icon iconfont icon-gouwu"></i> 购物车空空如也，赶紧逛逛吧~~
+			</section>
+            {% endif %}
+			<section class="goods-list">
+				<div class="title">
+					热卖商品
+				</div>
+				{% if hot %}
+                <div class="contain-main">
+                    {% for h in hot %}
+                    <div class="contain-item">
+						<a href="{% url 'detail' h.id %}"><img class="trans" src="{% static 'img/white.jpg' %}" data-src="{{ MEDIA_URL }}{{ h.get_imgs.0.src }}" width="100%" />
+                        <p class="goods-title">{{ h.name }}</p></a>
+                        <p class="goods-prices">￥<span class="lfont">{{ h.price|int_price }}</span>{{ h.price|dec_price }}</p>
+                    </div>
+                    {% endfor %}
+                    <div class="clearfix"></div>
+                </div>
+                {% endif %}
+			</section>
+		</div>
+		<footer>
+			<div class="icon-outer-all active">
+				<i class="icon iconfont"></i>
+			</div>
+			<span>全选</span>
+			<div class="count">
+				<p class="count-price">合计: ￥<span>699.00</span></p>
+				<p class="count-all">(不包含运费)</p>
+			</div>
+			<div class="pay">
+                <form method="post" id="payForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="cart_id" value="">
+				    <a id="payBtn">去结算<span>(0)</span></a>
+                </form>
+			</div>
+			<div class="clearfix"></div>
+		</footer>
+		<div class="style-modal">
+			<div class="modal-heading">
+				<span class="price">￥699.00</span>
+				<p class="choice">已选：<span>白色/移动</span></p>
+				<div class="goods-img">
+
+                </div>
+				<div class="close">&times;</div>
+			</div>
+			<div class="modal-contain">
+				<ul>
+					<li class="style">
+						<div class="modal-title"></div>
+						<div class="modal-right">
+							<ul>
+
+							</ul>
+						</div>
+						<div class="clearfix"></div>
+					</li>
+				</ul>
+			</div>
+            <form action="" method="get" id="changeStyleForm">
+                <input type="hidden" name="cart_goods_id" value="">
+                <input type="hidden" name="img_id" value="">
+                {% csrf_token %}
+            </form>
+			<div class="modal-bottom">
+				<a class="cancel" href="javascipt:void(0);">取消</a><a class="confirm" onclick="document.getElementById('changeStyleForm').submit();">确定</a>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="shadow"></div>
+		<div class="cart-modal none">
+			<div class="gou">
+				<i class="icon iconfont icon-gou1"></i>
+			</div>
+			<p>加入购物车成功</p>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/wan-spinner.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	<script src="{% static 'js/cart.js' %}"></script>
+</html>

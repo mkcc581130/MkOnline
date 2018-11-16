@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<style>
+			.main{
+				text-align: center;
+                margin: 30px;
+                border: 1px solid #e1e1e1;
+                padding-bottom: 30px;
+                border-radius: 8px;
+                box-shadow: 0px 5px 8px 0px #ccc;
+			}
+			.top{
+				color: #1cac19;
+				margin-top: 66px;
+				margin-bottom: 45px;
+			}
+			.middle #cny{
+				font-size: 20px;
+			}
+			.middle #paid{
+				font-size: 58px;
+                font-weight: bold;
+			}
+			.bottom{
+				margin-top: 188px;
+			}
+			.bottom a{
+				padding: 8px 80px;
+				border: 1px solid #1cac19;
+				color: #1cac19;
+				border-radius: 5px;
+				font-size: 16px;
+                display: inline-block;
+			}
+		</style>
+		<title>转账成功</title>
+	</head>
+	<body>
+		<div class="main">
+			<div class="top">
+				<img src="{% static 'img/wepay_logo.png' %}" width="80"/>
+				<p>支付成功</p>
+			</div>
+			<div class="middle">
+				<span id="cny">￥</span>
+				<span id="paid">{{ paid|int_price }}{{ paid|dec_price }}</span>
+			</div>
+			<div class="bottom">
+				<a id="complete">完成</a>
+			</div>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	<script>
+		$('#complete').click(function(){
+			location.replace('http://'+location.hostname+'/transfer/');
+		});
+	</script>
+</html>

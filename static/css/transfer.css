@@ -1,0 +1,129 @@
+body{
+	background-color: #efeef4;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: 14px;
+}
+.main{
+	margin: 20px;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background-color: #FFFFFF;
+}
+.main .top{
+	text-align: center;
+	padding: 15px 30px;
+	background-color: #fbfbfb;
+}
+.main .top img{
+	border-radius: 3px;
+}
+.main .top p{
+	padding-top: 10px;
+}
+.main .middle{
+	padding: 15px 30px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.main .middle .input-group{
+	border-bottom: 1px solid #efeef4;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	position: relative;
+}
+.main .middle .input-group i{
+	font-size: 30px;
+	position: absolute;
+	top: 16px;
+	left: 0;
+	font-style: normal;
+}
+.main .middle .input-group input{
+	padding-left: 30px;
+	border: none;
+	font-size: 60px;
+	width: 100%;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-weight: bold;
+}
+.main .bottom{
+	padding: 15px 30px 20px 30px;
+	text-align: center;
+}
+.main .bottom #transferSub{
+	display: inline-block;
+	background-color: #a3dfa1;
+	color: #cbf6cb;
+	width: 100%;
+	padding: 10px 0;
+	border-radius: 5px;
+	font-size: 16px;
+}
+.main .bottom #transferSub.active{
+	background-color: #1cac19;
+	color: #FFFFFF;
+}
+.main .bottom .remark{
+	margin-top: 20px;
+	display: inline-block;
+	color: rgb(91,114,157);
+}
+.remark-modal{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 300px;
+	height: 160px;
+	margin-top: -80px;
+	margin-left: -150px;
+	font-size:.16rem;
+	z-index: 20;
+	background-color: #FAF9FE;
+}
+.remark-modal .heading{
+	padding: 20px;
+	text-align: center;
+}
+.remark-modal .heading input{
+	padding: 8px 0 8px 5px;
+	border: none;
+	outline: none;
+	border: 1px solid #f2f0f2;
+	width: 100%;
+	font-size:.12rem;
+	margin-top: 20px;
+	box-sizing: border-box;
+}
+.remark-modal .button{
+	width: 100%;
+	text-align: center;
+}
+.remark-modal .button a{
+	float: left;
+	display: inline-block;
+	width: 50%;
+	box-sizing: border-box;
+	border-top: 1px solid #e8e7eb;
+	line-height: 46px;
+}
+.remark-modal .button a:last-child{
+	border-left: 1px solid #e8e7eb;
+	color: #1cac19;
+}
+.remark-modal .button:after{
+	clear: both;
+	height: 0;
+	visibility: hidden;
+}
+.shadow{
+	position: fixed;
+	top:0;
+	height: 0;
+	z-index: 10;
+	background-color: rgba(0,0,0,.6);
+	height: 1000px;
+	width: 100%;
+}

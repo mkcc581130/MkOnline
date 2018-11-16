@@ -1,0 +1,113 @@
+{#{% if is_wx %}#}
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/transfer.css' %}" />
+		<title>转账</title>
+	</head>
+	<body>
+		<div class="main">
+			<div class="top">
+				<img src="{% static 'img/108108.png' %}" width="50"/>
+				<p>杭州一慧文化创意有限公司</p>
+			</div>
+			<div class="middle">
+				<p>金额</p>
+				<div class="input-group">
+					<i>￥</i>
+					<input id="paid" type="tel" />
+				</div>
+			</div>
+			<div class="bottom">
+				<a id="transferSub" {% if wx_url %}href="{{ wx_url }}"{% endif %}>转账</a>
+                <span></span> <a class="remark">添加备注</a>
+			</div>
+		</div>
+        <div class="shadow none"></div>
+        <div class="remark-modal none">
+            <div class="heading">
+                <div>添加付款备注</div>
+                <input maxlength="20" id="remark" name="remark" type="text" placeholder="请点击并添加付款备注">
+            </div>
+            <div class="button">
+                <a class="cancel">取消</a>
+                <a class="confirm">确定</a>
+            </div>
+        </div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	{% if not wx_url %}
+    <script>
+        function reget(oid){
+            $.get('',{oid:oid},function (data) {
+               if(data.msg == "success"){
+                   location.replace('http://'+location.hostname+'/transfer_success/'+oid);
+               }else{
+                   window.setTimeout(function () {
+                       reget();
+                   },500);
+               }
+            });
+        }
+        function onBridgeReady(wx_pay, oid){
+           WeixinJSBridge.invoke(
+               'getBrandWCPayRequest', wx_pay,
+               function(res){
+                   if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                       reget(oid);
+                   }
+               }
+           );
+        }
+        $(function () {
+            $('#paid').on('input',function () {
+               if($(this).val()){
+                   $('#transferSub').addClass('active');
+               }else{
+                   $('#transferSub').removeClass('active');
+               }
+            });
+            $('#transferSub').click(function(){
+                if($('#paid').val()){
+                    $.get('',{paid:$('#paid').val(), remark:$('#remark').val()},function(data){
+                        var wx_pay = {
+                           "appId":data.jsapi.appId,     //公众号名称，由商户传入
+                           "timeStamp":data.jsapi.timeStamp,         //时间戳，自1970年以来的秒数
+                           "nonceStr":data.jsapi.nonceStr, //随机串
+                           "package":data.jsapi.package,
+                           "signType":"MD5",         //微信签名方式：
+                           "paySign":data.jsapi.paySign //微信签名
+                       };
+                       onBridgeReady(wx_pay, data.oid);
+                    });
+                }else{
+                    alert("请输入要转账的金额！");
+                }
+            });
+            $('.remark').click(function () {
+                $('.shadow').show();
+                $('.remark-modal').show();
+            });
+            $('.cancel').click(function () {
+                $('.shadow').hide();
+                $('.remark-modal').hide();
+            });
+            $('.confirm').click(function () {
+                $('.bottom span').text($('#remark').val());
+                $('.shadow').hide();
+                $('.remark-modal').hide();
+            });
+        });
+
+
+	</script>
+    {% endif %}
+</html>
+{#{% endif %}#}

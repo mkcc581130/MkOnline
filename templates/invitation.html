@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+	    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">    
+	    <title>邀请码</title>
+	    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/invitation.css' %}" />
+	</head>
+	<body>
+		<div class="outer">
+			<div class="inner1">
+				<p class="code" id="inviteId">{{ invitation }}</p>
+				<p class="txt">您的邀请码</p>
+				<div class="img">
+					<span id="copy"><img src="{% static 'img/lian.png' %}" width="54"/><br>复制</span>
+					<span class="erwei"><img src="{% static 'img/erwei.png' %}" width="54"/><br>二维码</span>
+					<span class="tuwen"><img src="{% static 'img/tuwen.png' %}" width="54"/><br>图文二维码</span>
+				</div>
+			</div>
+			<div class="inner2">
+				<span>邀请码</span> {% if invited %}<span class="invited">已输入他人邀请码，享受推广赚佣金</span>{% else %}<input type="text" name="code" id="code" value="" placeholder="输入他人邀请码，获得推广权限"/>{% endif %}
+			</div>
+			<div class="inner3">
+				<a class="btn {% if not invited %}active{% endif %}" onclick="">提交</a>
+			</div>
+		</div>
+		<div class="erwei-model none">
+			<div class="img">
+				<img src="" alt="" />
+				<span class="close">X</span>
+				<p><img src="{% static 'img/zhiwen.png' %}" width="17"/> 长按图片保存至相册</p>
+			</div>
+		</div>
+		<div class="copy-modal none">
+			<p>复制成功</p>
+		</div>
+	</body>
+	<script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}" ></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.close').click(function(){
+				$('.erwei-model').hide();
+			});
+			$('.erwei').click(function(){
+				$.get('',{img:'erwei'},function(data){
+					$('.erwei-model .img>img').attr('src', data.img_url);
+					$('.erwei-model').show();
+				});
+			});
+			$('.tuwen').click(function(){
+				$.get('',{img:'tuwen'},function(data){
+					$('.erwei-model .img>img').attr('src', data.img_url);
+					$('.erwei-model').show();
+				});
+			});
+			$('#copy').click(function(){
+		        const range = document.createRange();
+		        range.selectNode(document.getElementById('inviteId'));
+		        const selection = window.getSelection();
+		        if(selection.rangeCount > 0) selection.removeAllRanges();
+		        selection.addRange(range);
+		        document.execCommand('copy');
+		        $('.copy-modal').find('p').text('复制成功').end().fadeIn();
+	            window.setTimeout(function(){
+                    $('.copy-modal').fadeOut();
+                },1000);
+			});
+			$('.btn.active').click(function () {
+                $.get('',{invite_id:$('#code').val()},function(data){
+					if(data.result == 'success'){
+					    location.reload();
+                    }else if(data.result == 'repeat'){
+					    $('.copy-modal').find('p').text('不可用邀请码').end().fadeIn();
+                        window.setTimeout(function(){
+                            $('.copy-modal').fadeOut();
+                        },1000);
+                    }else{
+                        $('.copy-modal').find('p').text('邀请码不存在').end().fadeIn();
+                        window.setTimeout(function(){
+                            $('.copy-modal').fadeOut();
+                        },1000);
+                    }
+				});
+            });
+		});
+	</script>
+</html>

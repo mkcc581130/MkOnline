@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/mine.css' %}" />
+		<title>个人中心</title>
+	</head>
+
+	<body>
+		<header id="mineHeader">
+			
+			<div class="nav-back">
+				<a href="{% url 'index' %}"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">个人中心</p>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li class="active">
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<section class="my-heading">
+            <div class="heading">
+                <div class="heading-img">
+                    <img src="{{ customer.user_icon }}" width="56"/>
+                </div>
+                <div class="heading-info">
+                    <p class="heading-name">{{ customer.username }}</p>
+                    <p class="heading-level">{{ customer.classify }}</p>
+                </div>
+                <div class="heading-logout">
+                    <a href="{% url 'account' %}">账户管理<i class="icon iconfont icon-jtright"></i></a>
+                </div>
+            </div>
+		</section>
+        <section class="wallet">
+{#			<div class="wallet-heading">#}
+{#				<i class="icon iconfont icon-qianbao"></i> 我的钱包#}
+{#			</div>#}
+			<div class="wallet-main">
+				<ul>
+					<li><a href="javascipt:void(0);">
+						<p>{{ customer.enable_commission }}</p>
+						<p>账户余额</p>
+					</a></li>
+                    <li><a href="javascipt:void(0);">
+						<p>{{ customer.commission }}</p>
+						<p>总佣金</p>
+					</a></li>
+					<li><a href="javascipt:void(0);">
+						<p>{{ customer.red_packet }}</p>
+						<p>红包</p>
+					</a></li>
+
+				</ul>
+			</div>
+		</section>
+		<section class="order">
+			<div class="order-heading">
+				<a href="{% url 'order' '0' %}">
+					<i class="icon iconfont icon-dingdan"></i> 我的订单
+					<p>全部订单 <i class="icon iconfont icon-jtright"></i></p>
+				</a>
+			</div>
+			<div class="order-main">
+				<ul>
+					<li><a href="{% url 'order' '1' %}">
+						<i class="icon iconfont icon-yinxingqia"></i>
+						<p>待付款</p>
+					</a></li>
+					<li><a href="{% url 'order' '2' %}">
+						<i class="icon iconfont icon-huoche"></i>
+						<p>待收货</p>
+					</a></li>
+					<li><a href="{% url 'coupon' %}">
+						<i class="icon iconfont icon-youhuiquan"></i>
+						<p>优惠券</p>
+					</a></li>
+				</ul>
+			</div>
+		</section>
+
+        <section class="endo">
+			<div class="endo-heading">
+                <a href="{% url 'endorsement' %}">
+                    <i class="icon iconfont icon-mingpian"></i> 代言人中心
+                    <p> <i class="icon iconfont icon-jtright"></i></p>
+                </a>
+
+			</div>
+			<div class="endo-main">
+				<ul>
+                    <li><a href="{% url 'promote_list' 'first' %}">
+						<p>{{ customer.invitation.get_customer_num }}</p>
+						<p>推广人数</p>
+					</a></li>
+
+					<li><a href="{% url 'poster' %}">
+						<i class="icon iconfont icon-erweima"></i>
+						<p>推广二维码</p>
+					</a></li>
+					<li><a href="javascipt:void(0);">
+						<p>{{ customer.promote }}</p>
+						<p>推广额</p>
+					</a></li>
+				</ul>
+			</div>
+		</section>
+        <section class="cash">
+			<div class="cash-heading">
+                <a href="{% url 'endorsement_cash' %}">
+                    <i class="icon iconfont icon-tixian"></i> 余额提现
+                    <p> <i class="icon iconfont icon-jtright"></i></p>
+                </a>
+			</div>
+		</section>
+        <section class="follow">
+			<div class="follow-heading">
+                <a href="{% url 'more' 'follow' %}">
+                    <i class="icon iconfont icon-xin1"></i> 我的关注
+                    <p> <i class="icon iconfont icon-jtright"></i></p>
+                </a>
+			</div>
+		</section>
+
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+</html>

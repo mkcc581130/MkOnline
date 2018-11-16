@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+	    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">    
+	    <title>微信授权</title>
+	    <link rel="stylesheet" href="css/base.css" />
+	    <style type="text/css">
+	    	.outer{
+	    		background-color: #FFFFFF;
+	    		height: 160px;
+	    		text-align: center;
+	    	}
+	    	.inner{
+	    		display: inline-block;
+	    		width: 80px;
+	    		height: 80px;
+	    		border-radius: 40px;
+	    		background-color: #06BF04;
+	    		padding-top: 20px;
+	    		box-sizing: border-box;
+	    		margin-top: 30px;
+	    		margin-bottom: 10px;
+	    	}
+	    	.inner a{
+	    		color: #FFFFFF;
+	    		text-decoration: none;
+	    	}
+	    	.inner a span:first-child{
+	    		font-size: 14px;
+	    	}
+	    	.inner a span:last-child{
+	    		font-size: 18px;
+	    	}
+	    	.words{
+	    		color: #aaa;
+	    	}
+	    </style>
+	</head>
+	<body>
+		<div class="outer">
+			<div class="inner">
+				<a href="{{ wx_url }}">
+					<span>点击授权</span><br><span>微信号</span>
+				</a>
+			</div>
+			<div class="words">
+				微信授权后，可支持佣金提现到微信钱包
+			</div>
+		</div>
+	</body>
+</html>

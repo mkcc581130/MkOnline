@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html class="" lang="zh-cmn-Hans">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+	    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">    
+	    <title>结算中心</title>
+        <link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+	    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+	    <link rel="stylesheet" href="{% static 'css/endorsement_cash.css' %}" />
+	</head>
+	<body class=" ">
+		<div class="container " style="min-height: 667px;">
+			<div class="content">
+
+				<div class="block head-info">
+					<p class="rmb_logo"></p>
+					<p class="useful-money font-size-14">可提现金额</p>
+					<p class="profit-sum font-size-28">￥<span>{{ cash }}</span></p>
+				</div>
+                <form id="cashForm" action="" method="post">
+                    {% csrf_token %}
+                    <div class="block block-list">
+                        <label class="block-item">
+                            本次提现<input id="cash" name="cash" type="text" maxlength="8" class="js-withdraw-money withdraw-money" placeholder="单笔最高提现2万">
+                        </label>
+                    </div>
+                    <div class="block block-list">
+                        <label class="block-item">
+                            提现账户<input id="account" name="account" type="number" class="js-withdraw-money withdraw-money" placeholder="请输入需要提现到的银行账户">
+                        </label>
+                    </div>
+                    <div class="block block-list">
+                        <label class="block-item">
+                            姓名<input id="name" name="name" type="text" class="js-withdraw-money withdraw-money" placeholder="银行账户对应的姓名">
+                        </label>
+                    </div>
+                    <div class="block block-list">
+                        <a href="javascript:void(0);" class="block-item clearfix1 js-modify-account">银行<span class="bank">账号自动识别</span></a>
+                    </div>
+    {#                {% if is_authorize %}#}
+    {#                    <div class="block block-list">#}
+    {#                        <a href="javascript:void(0);" class="block-item clearfix1 arrow js-modify-account">提现账户<span>微信钱包({{ customer }})</span></a>#}
+    {#                    </div>#}
+    {#                {% else %}#}
+    {#                    <div class="block block-list">#}
+    {#                        <a href="{% url 'authorize' 'cash' %}" class="block-item clearfix1 arrow js-modify-account">提现账户<span>点击授权</span></a>#}
+    {#                    </div>#}
+    {#                {% endif %}#}
+                    <div class="action-container {% if is_authorize %}active{% endif %}">
+                        <a class="btn btn-block btn-green">提现</a>
+                    </div>
+                </form>
+{#				<div class="block block-list">#}
+{#					<a href="https://wap.youzan.com/salesman/assets/center/getInOutRecordsHtml" class="block-item clearfix1 arrow">#}
+{#						<p class="pull-left">收支明细</p>#}
+{#					</a>#}
+					<a href="https://wap.youzan.com/salesman/assets/center/getWithdrawRecordsHtml" class="block-item clearfix1 arrow">
+						<p class="pull-left">提现记录</p>
+					</a>
+				</div>
+            <div class="block withdraw-tip font-size-12">
+                    • 金额低于1元时不可提现
+            </div>
+            <div class="block withdraw-tip font-size-12">
+                    • 预计1-3个工作日可到账
+            </div>
+            <div class="block withdraw-tip font-size-12">
+                    • 提现手续费率为1%
+            </div>
+			</div>
+		</div>
+	</body>
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+    <script>
+        {% if status %}
+            zeroModal.alert({
+                content: '转账申请提交成功',
+                width:'80%',
+                height:'260px',
+
+            });
+        {% endif %}
+        $(function () {
+            var enable = true;
+            $('.btn').click(function () {
+                var cash = parseFloat($('#cash').val());
+                var account = $('#account').val();
+                var commission = parseFloat($('.profit-sum').find('span').text());
+                var name = $('#name').val();
+                if(cash == 0 || account == '' || name == ''){
+                    zeroModal.alert({
+                        content: '仍有未填写表格',
+                        width:'80%',
+                        height:'260px'
+                    });
+                }else if(cash<1){
+                    zeroModal.alert({
+                        content: '提现金额小于1元',
+                        width:'80%',
+                        height:'260px'
+                    });
+                }else if(cash > commission){
+                    zeroModal.alert({
+                        content: '金额大于可提现金额',
+                        width:'80%',
+                        height:'260px'
+                    });
+                }else if(account == ''){
+                    zeroModal.alert({
+                        content: '银行账号不能为空',
+                        width:'80%',
+                        height:'260px'
+                    });
+                }else if(account.length < 16){
+                    zeroModal.alert({
+                        content: '银行账号不能小于16位',
+                        width:'80%',
+                        height:'260px'
+                    });
+                }else if(account.length > 19){
+                    zeroModal.alert({
+                        content: '银行账号不能大于19位',
+                        width:'80%',
+                        height:'260px'
+                    });
+                }else if(enable){
+                    enable = false;
+                    $('#cashForm').submit();
+                }
+            });
+            $('#account').on('input',function(){
+                var val = $(this).val();
+                if(val.length >= 6){
+                    $.get('',{account:val.slice(0,6)},function (data) {
+                        if(data.status == 'success'){
+                            if(!enable) enable = true;
+                            $('.bank').text(data.bank + " (" + data.type + ")")
+                        }else{
+                            if(enable) enable = false;
+                            $('.bank').text("账号错误，请重新输入！")
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</html>

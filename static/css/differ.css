@@ -1,0 +1,140 @@
+/*头部导航栏*/
+#differHeader{
+	height: 44px;
+	border-bottom: 1px solid #d7d7d7;
+	width: 100%;
+	background: #efefef url(../img/nav-bg.png) repeat-x 0 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 109;
+	padding-left: 40px;
+	padding-right: 48px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.nav-search{
+	width: 100%;
+	padding-top: 7px;
+	position: relative;
+}
+.nav-search input{
+	width: 100%;
+	border: 1px solid #bfbfbf;
+	border-radius: 4px;
+	height: 30px;
+    overflow: hidden;
+    background: #fff;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 10px;
+}
+.nav-search button{
+	border: none;
+	background: none;
+	position: absolute;
+	right: 8px;
+	top: 13px;
+	color: #888888;
+	display: block;
+	height: 20px;
+	width: 20px;
+	text-align: center;
+	line-height: 20px;
+}
+.nav-search button i{
+	display: block;
+	height: 20px;
+	
+}
+.classify>ul{
+	width: 100%;
+	margin-top: 50px;
+}
+.classify-one{
+	float: left;
+	width: 30%;
+	box-sizing: border-box;
+	padding: 0 6px 0 5px;
+	background-color: #fff;
+}
+.classify-one a{
+	display: inline-block;
+	margin: 8px 0;
+}
+.classify-one img{
+	width: 100%;
+}
+.classify-two{
+	float: left;
+	width: 70%;
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+.classify-two .title{
+	padding: 5px 0;
+}
+.classify-two ul{
+	width: 100%;
+	overflow: auto;
+	background-color: #fff;
+	padding-top: 18px;
+}
+.classify-two ul li{
+	float: left;
+	width: 33.3%;
+	box-sizing: border-box;
+	text-align: center;
+    margin-bottom: 18px;
+}
+.classify-two ul li a{
+	display: inline-block;
+	color:#333;
+}
+.classify-two ul li p{
+	margin: 10px 0;
+}
+.classify-two:after{
+	display: block;
+	clear: both;
+	content: "";
+	visibility: hidden;
+	height: 0;
+}
+.clearfix1{
+	display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+}
+.swiper-container2{
+	background-color: #fff;
+	margin-bottom: 4px;
+	margin-top: 44px;
+	width: 100%;
+}
+.swiper-container2 .swiper-slide{
+	box-sizing: border-box;
+	text-align: center;
+	height: 40px;
+	border-bottom: 2px solid #e1e1e1;
+}
+.swiper-container2 a{
+	display: block;
+	height: 100%;
+	color: #252525;
+	line-height: 40px;
+}
+.swiper-container2 .active{
+	border-bottom: 2px solid #fe4800;
+}
+.swiper-container2 .active a{
+	color: #fe4800;
+}
+.no-goods{
+	text-align: center;
+	font-size: 16px;
+	color: #888;
+	padding-top: 40px;
+}

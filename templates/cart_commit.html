@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/cart_commit.css' %}" />
+
+		<title>确认订单</title>
+	</head>
+	<body>
+		<header id="cartHeader">
+			<div class="nav-back">
+				<a href="{% url 'cart' %}"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">确认订单</p>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<div class="main">
+			<section class="information">
+				<div class="cart-item">
+					<a href="{% url 'delivery' 'change' %}">
+                        {% if address %}
+						<p class="info"><span class="name">{{ address.recipient }}</span><span class="tel">{{ address.tel }}</span></p>
+						<p class="locate"><i class="icon iconfont icon-dingwei"></i>{{ address.provinces }}{{ address.cities }}{{ address.areas }} {{ address.detail }}</p>
+
+                        {% else %}
+                            <p>请填写您的收货地址！</p>
+                        {% endif %}
+                        <i class="icon iconfont icon-jtright"></i>
+					</a>
+				</div>
+			</section>
+			<section class="item">
+                {% if cartgoods %}
+                    {% for g in cartgoods %}
+                    <div class="cart-item">
+                        <a href="{% url 'detail' g.image.goods_id %}">
+                            <img src="{{ MEDIA_URL }}{{ g.image.src }}" width="75"/>
+                            <div class="cart-item-title"><p>{{ g.image.goods }}</p><span>{{ g.image.get_props_all }} X {{ g.number }}</span></div>
+                            <p class="cart-item-price">￥{{ g.image.goods.price }}</p>
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                {% if goods %}
+                    <div class="cart-item">
+                        <a href="{% url 'detail' goods.id %}">
+                            <img src="{{ MEDIA_URL }}{{ image.src }}" width="75"/>
+                            <div class="cart-item-title"><p>{{ goods }}</p><span>{{ image.get_props_all }} X {{ number }}</span></div>
+                            <p class="cart-item-price">￥{{ goods.price }}</p>
+                        </a>
+                    </div>
+                {% endif %}
+			</section>
+            <section class="coupon">
+            {% if not discount == 100 %}
+                <p >折扣 <span class="pull-right dis">{{ discount|discount }}折</span></p>
+            {% endif %}
+            {% if not red_packet == 0.00 %}
+                    <p >红包 <span class="pull-right dis">-￥{{ red_packet }}</span></p>
+            {% endif %}
+            {% if coupon %}
+				<p class="coupon-item">优惠券
+                    <span class="pull-right dis">-￥{{ coupon.dis }}.00</span><br>
+                    <span class="pull-right coupon-name">{{ coupon.name }}</span>
+                </p>
+                <div class="clearfix"></div>
+
+            {% endif %}
+				<div class="clearfix"></div>
+			</section>
+            <section class="price">
+				<p >商品金额 <span class="pull-right goods-price">￥{% if has_freight %}{{ price|add:-10 }}{% else %}{{ price }}{% endif %}</span></p>
+				<p class="weight">运费 <span class="pull-right grey">{% if has_freight %}￥10.00{% else %}￥0.00{% endif %}</span></p>
+                <div class="clearfix"></div>
+                <p class="total-price">总价：<span class="goods-price">￥{{ price }}</span></p>
+
+			</section>
+		</div>
+		<footer>
+			<a {% if address %}href="{% url 'pay' '' %}"{% endif %} class="order-sub pull-right">提交订单</a>
+			<span class="pull-right"></span>
+		</footer>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+	<script src="{% static 'js/cart_commit.js' %}"></script>
+    {% if not address %}
+    <script>
+        $('.order-sub').click(function () {
+            zeroModal.alert({
+                content:'请填写收货地址！',
+                width:'80%',
+                height:'260px'
+            });
+        });
+    </script>
+    {% endif %}
+</html>

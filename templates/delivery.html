@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/zeroModal.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/delivery.css' %}" />
+		<title>收货地址</title>
+	</head>
+
+	<body>
+		<header id="deliveryHeader">
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">收货地址</p>
+		</header>
+		<div class="main">
+			{% for a in address %}
+			<section>
+				<div class="delivery-item {% if change %}change{% endif %}" data-id="{{ a.id }}">
+					<div class="info">
+						<span class="pull-left">{{ a.recipient }}</span>
+						<span class="pull-right">{{ a.tel }}</span>
+						<div class="clearfix"></div>
+					</div>
+					<div class="address">
+						{{ a.provinces }}{{ a.cities }}{{ a.areas }} {{ a.detail }}
+					</div>
+				</div>
+				<div class="delivery-item">
+					<div class="pull-left">
+						<input type="radio" name="radio" id="radio{{ a.id }}" class="radio none" {% if a.default %} checked {% endif %} />
+						<label for="radio{{ a.id }}" data-id="{{ a.id }}"><i class="icon iconfont"></i> 默认地址</label>
+					</div>
+					<div class="pull-right">
+						<a href="{% url 'delivery_change' 'edit' a.id %}"><i class="icon iconfont icon-bianji"></i> 编辑 </a>
+						<a class="delete" data-id="{{ a.id }}"><i class="icon iconfont icon-shanchu"></i> 删除 </a>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+
+			</section>
+			{% endfor %}
+			
+		</div>
+		<div class="new">
+			<a href="{% url 'delivery_change' 'add' '0' %}">+ 新增收货地址</a>
+		</div>
+	</body>
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/zeroModal.min.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    <script>
+        $(function () {
+            $('label').click(function () {
+                var $_t = $(this);
+                $.get('',{action: 'change_default', id: $_t.data('id')},function(data) {
+                    if(data.msg!='success'){
+                        zeroModal.alert({
+                            content:data.msg,
+                            width:'80%',
+                            height:'260px'
+                        });
+                    }
+                });
+            });
+            $('.delete').click(function () {
+                var $_t = $(this);
+                zeroModal.confirm({
+                    content:'您确定删除该收货地址吗？',
+                    width:'80%',
+                    height:'260px',
+                    okFn:function(){
+                        $.get('',{action: 'delete', id: $_t.data('id')},function(data) {
+                            data.msg=='success' ? $_t.parents('section').remove():alert(data.msg);
+                        });
+                    }
+                });
+            });
+            {% if change %}
+                $('.change').click(function (){
+                    var $_t = $(this);
+                    console.info($_t.data('id'));
+                    $.get('',{change_id:$_t.data('id')},function (data) {
+                        if(data.msg == 'success'){
+                            window.location.replace(getCookie('delivery_to'));
+                        }
+                    });
+                });
+            {% endif %}
+        });
+
+    </script>
+</html>

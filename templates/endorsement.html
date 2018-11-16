@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html class="" lang="zh-cmn-Hans">
+	<head>
+	    <meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+	    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+	    <title>代言人中心</title>
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+	    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+	    <link rel="stylesheet" href="{% static 'css/endorsement.css' %}" />
+	</head>
+	<body class=" " ontouchstart="">
+	    <div class="container " style="min-height: 500px;">
+	        <div class="salesman-center">
+	        	<div class="salesman-center__header">
+	        		<div class="salesman-center__avatar">
+	        			<img src="{{ customer.user_icon }}" alt="avatar">
+	        		</div> 
+	        		<div class="salesman-center__tel">{{ customer.username }}</div>
+	        		<div class="salesman-center__upgrade">
+	        			<a href="{% url 'endorsement_type' %}">
+	        				<span class="salesman-center__level-innertext">升级到{{ endorsement.name }}，享受{{ endorsement.discount|discount }}折优惠，一级推广佣金比高达 {{ endorsement.first_commission }}% 二级推广佣金比高达 {{ endorsement.second_commission }}% 三级推广佣金比高达 {{ endorsement.third_commission }}% </span>
+	        				<i class="icon iconfont icon-jtright"></i>
+	        			</a>
+	        		</div> 
+	        		<div class="salesman-center__level-center">
+	        			<a href="{% url 'endorsement_type' %}">
+	        				<i class="icon-level"></i> 
+	        				<span>{{ customer.classify }}</span>
+	        			</a>
+	        		</div>
+	        	</div> 
+	        	<div class="">
+	        		<div class="salesman-center__earning">
+	        			<a href="javascript:void(0);">
+	        				<p>当前推广累计收益(元)</p> 
+	        				<div class="salesman-center__earning-number">{{ customer.commission }}</div>
+	        				<!--<div class="salesman-center__earning-future">包含待结算0.00元</div>-->
+	        			</a>
+	        		</div> 
+	        		<div class="salesman-center__total clearfix1">
+	        			<a href="javascript:void(0);">
+	        				<div class="salesman-center__total-promotion">
+	        					<div class="inner">
+	        						<p>累计推广金（元）</p> 
+	        						<div class="salesman-center__promotion-number">{{ customer.promote }}</div>
+	        						<!--<div class="salesman-center__promotion-future">待统计 0.00元</div>-->
+	        					</div>
+	        				</div>
+	        			</a> 
+	        			<a href="javascript:void(0);">
+	        				<div class="salesman-center__total-promotion">
+	        					<p>累计消费金（元）</p> 
+	        					<div class="salesman-center__promotion-number">{{ customer.consumption }}</div>
+	        					<!--<div class="salesman-center__promotion-future">待统计 0.00元</div>-->
+	        				</div>
+	        			</a>
+	        		</div> 
+	        		<div class="salesman-center__money-detail">
+	        			<div class="van-cell-group van-hairline--top-bottom"><!----> 
+	        				<div class="van-cell van-hairline van-cell--clickable">
+                                <a href="{% url 'endorsement_cash' %}" style="color: #333;">
+                                    <div class="van-cell__title"><!---->可提现佣金 {{ customer.enable_commission }}元</div>
+                                    <div class="van-cell__value van-cell__value--link">
+                                        <span>立即提现</span>
+                                    </div>
+                                    <i class="icon iconfont icon-jtright"></i>
+                                </a>
+	        				</div>
+	        			</div>
+	        		</div> 
+	        		<div class="salesman-center__customer-data">
+	        			<ul class="salesman-center__customer-list clearfix1">
+	        				<li>
+	        					<a href="{% url 'promote_list' 'all' %}">
+	        						<div class="number">{{ total_customer }}</div>
+	        						<div class="desc">累计客户</div>
+	        					</a>
+	        				</li> 
+	        				<li>
+	        					<a href="{% url 'promote_list' 'first' %}">
+	        						<div class="number">{{ customer.invitation.get_customer_num }}</div>
+	        						<div class="desc">累计推广</div>
+	        					</a></li> 
+	        					<li>
+	        						<a href="javascript:void(0);">
+	        							<div class="number">{{ customer.invitation.get_order_num }}</div>
+	        							<div class="desc">推广订单</div>
+	        						</a>
+	        					</li>
+	        			</ul>
+	        		</div>
+	        	</div> 
+	        	<div class="salesman-center__promotion">
+	        		<ul class="clearfix1">
+	        			<li class="salesman-center__promotion-item">
+	        				<a href="{% url 'more' 'promote' %}">
+	        					<div class="salesman-center__promotion-inner inner-1">
+	        						<div class="salesman-center__promotion-title">推广商品</div> 
+	        						<div class="salesman-center__promotion-link">赚佣金</div> 
+	        						<div class="salesman-center__promotion-icon"></div>
+	        					</div>
+	        				</a>
+	        			</li> 
+	        			<li class="salesman-center__promotion-item">
+	        				<a href="{% url 'poster' %}">
+	        					<div class="salesman-center__promotion-inner inner-2">
+	        						<div class="salesman-center__promotion-title">海报推广</div> 
+	        						<div class="salesman-center__promotion-link">拉顾客</div> 
+	        						<div class="salesman-center__promotion-icon"></div>
+	        					</div>
+	        				</a>
+	        			</li> 
+	        			<li class="salesman-center__promotion-item">
+	        				<a href="{% url 'invitation' %}">
+	        					<div class="salesman-center__promotion-inner inner-3">
+	        						<div class="salesman-center__promotion-title">邀请码</div> 
+	        						<div class="salesman-center__promotion-link">齐推广</div> 
+	        						<div class="salesman-center__promotion-icon"></div>
+	        					</div>
+	        				</a>
+	        			</li>
+	        		</ul>
+	        	</div> 
+	        	<div class="van-cell-group salesman-center__faq van-hairline--top-bottom">
+	        		<a href="{% url 'questions' %}">
+                        <div class="van-cell van-hairline van-cell--clickable">
+                            <div class="van-cell__title"><!---->常见问题</div><!---->
+                            <i class="icon iconfont icon-jtright"></i><!----></i>
+                        </div>
+                    </a>
+	        	</div>
+	        </div>
+	    </div>
+	</body>
+</html>

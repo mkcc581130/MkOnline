@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html class="" lang="zh-cmn-Hans">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+	    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+	    <title>代言人等级</title>
+	    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+	    <link rel="stylesheet" href="{% static 'css/endorsement_type.css' %}" />
+    </head>
+	<body>
+		<div class="container " style="min-height: 421px;">
+			<div>
+				<div class="level-header">
+					<div class="level-title">{{ customer.classify }}</div>
+					<div class="stepper-wrap">
+						<div class="stepper clearfix1">
+                            {% for e in endorsement %}
+                                {% if e.id > 1 %}
+                                <div class="stepper-point {% if customer.classify_id > e.id %}finished{% elif customer.classify_id == e.id %}actived finished{% endif %}">
+                                    <!---->
+                                    {% if e.id > 2 %}
+                                        <div class="stepper-line">
+                                            {% if customer.classify_id|add:1 == e.id %}
+                                                <div class="will-finish" style="width: 50%;"><span></span></div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    <span class="point"></span>
+                                    <span class="point-outer"></span>
+                                    <span class="desc">{{ e.name }}</span>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="level-percentage clearfix1">
+					<div class="level-percentage__wrap">
+						<div class="level-percentage__inner-wrap">
+							<div class="promotion-icon"></div>
+							<div class="level-percentage__desc"><span>{{ customer.classify.first_commission }}%</span> <span class="title">一级佣金比</span></div>
+						</div>
+					</div>
+					<div class="level-percentage__wrap">
+						<div class="level-percentage__inner-wrap">
+							<div class="invite-icon"></div>
+							<div class="level-percentage__desc"><span>{{ customer.classify.second_commission }}%</span> <span class="title">二级佣金比</span></div>
+						</div>
+					</div>
+					<div class="level-percentage__wrap">
+						<div class="level-percentage__inner-wrap">
+							<div class="invite-icon"></div>
+							<div class="level-percentage__desc"><span>{{ customer.classify.third_commission }}%</span> <span class="title">三级佣金比</span></div>
+						</div>
+					</div>
+				</div>
+				<div class="level-content">
+					<div class="level-content__title">等级规则</div>
+					<div>
+                        {% for e in endorsement %}
+                            {% if e.id > 1 %}
+                            <div class="level-content__item">
+                                <div class="level-content__item-title">
+                                    {{ e.name }}
+                                </div>
+                                <div class="level-content__item-rule"><i class="left-icon-profile"></i> <span>规则介绍</span>
+                                    <p>{% if e.id == 2 %}输入邀请码后即是该等级{% else %}累计推广金与消费金达{{ e.total_amount }}元{% endif %}</p>
+                                </div>
+                                <div class="level-content__item-profit"><i class="left-icon-profit"></i> <span>权益介绍</span>
+                                    <p><span class="profit-detail">享受{{ e.discount|discount }}折优惠</span><br>
+                                        <span class="profit-detail">一级佣金比为 {{ e.first_commission }}%</span>
+                                        <span class="profit-detail">二级佣金比为 {{ e.second_commission }}%</span><br>
+                                        <span class="profit-detail">三级级佣金比为 {{ e.third_commission }}%</span></p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

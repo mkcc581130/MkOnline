@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load myfilter %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/differ.css' %}" />
+		<title>商品分类</title>
+	</head>
+
+	<body>
+		<header id="differHeader">
+
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<div class="nav-search">
+				<form action="" method="get">
+					<input type="search" name="search" placeholder="热卖商品搜索" x-webkit-speech="" x-webkit-grammar="builtin:search" lang="zh-CN" value="{{ search }}">
+					<button type="submit"><i class="icon iconfont icon-search"></i></button>
+				</form>
+			</div>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+        <div class="contain-main" style="margin-top: 40px">
+        {% if goods %}
+            {% for g in goods %}
+            <div class="contain-item">
+                <a href="{% url 'detail' g.id %}"><img class="trans" src="{% static 'img/white.jpg' %}" data-src="{{ MEDIA_URL }}{{ g.get_imgs.0.src }}" width="100%" />
+                <p class="goods-title"><span class="brand">慧绣</span> {{ g.name }}</p></a>
+                <p class="goods-prices">￥<span class="lfont">{{ g.price|int_price }}</span>{{ g.price|dec_price }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-goods">亲，没有此类商品，工作人员正在加紧上新中～</p>
+        {% endif %}
+
+            <div class="clearfix"></div>
+        </div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/swiper.jquery.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/differ.js' %}"></script>
+</html>

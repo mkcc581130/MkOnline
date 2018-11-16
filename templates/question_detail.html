@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/questions.css' %}" />
+		<title>常见问题详情</title>
+	</head>
+
+	<body>
+		<header id="questionHeader">
+
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">常见问题详情</p>
+		</header>
+        <div class="detail">
+            <div>
+                <div class="title">{{ question.title }}</div>
+                <div class="content">{{ question.content|safe }}</div>
+            </div>
+        </div>
+</body>
+</html>

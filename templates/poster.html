@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+	    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">    
+	    <title>邀请海报</title>
+	    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        <style>
+            .outer{
+                text-align: center;
+                color: #888888;
+            }
+            .warning{
+                line-height: 20px;
+                background-color: #fff6e1;
+                font-size: 12px;
+                color: #f60;
+                text-align: center;
+            }
+            img{
+                width: 360px;
+            }
+            .inner1{
+                margin: 20px 0;
+                font-size: 16px;
+            }
+            .inner2{
+               margin-top: 25px;
+                font-size: 20px;
+            }
+            @media only screen and (max-width:375px) {
+                img{
+                    width: 330px;
+                }
+                .inner1{
+                    margin: 6px 0;
+                }
+                .inner2{
+                   margin-top: 8px;
+                }
+            }
+            @media only screen and (max-width:320px) {
+                img{
+                    width: 280px;
+                }
+                .inner1{
+                    font-size: 14px;
+                }
+                .inner2{
+                    font-size: 16px;
+                }
+            }
+        </style>
+	</head>
+	<body>
+		<div class="outer">
+            <div class="warning">海报有效期至{{ expire_time }},过期后请重新获取</div>
+			<div class="inner1">将海报发送给好友，推广赚佣金！</div>
+			<img src="{{ img_url }}" alt="" />
+			<div class="inner2">点击图片，长按保存至相册</div>
+		</div>
+	</body>
+</html>

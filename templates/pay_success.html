@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/pay_success.css' %}" />
+		<title>订单提交成功</title>
+	</head>
+	<body>
+		<header id="payHeader">
+			<p class="nav-title">订单提交成功</p>
+			<div class="nav-c">
+				<a href="javascript:void(0);"> <i class="icon iconfont icon-mulu"></i> </a>
+			</div>
+			<div class="nav-dropdown">
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><i class="icon iconfont icon-index"></i>
+							<p>首页</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'differ' %}"><i class="icon iconfont icon-fenlei"></i>
+							<p>分类</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'cart' %}"><i class="icon iconfont icon-gouwu"></i>
+							<p>购物车</p>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'mine' %}"><i class="icon iconfont icon-wode"></i>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<div class="main">
+			<div class="top">
+				<div class="left">
+					<i class="icon iconfont icon-dingdan3"></i>
+					<div class="gou">
+						<i class="icon iconfont icon-gou"></i>
+					</div>
+				</div>
+				
+				<div class="right">
+					<p>支付方式：<span>{{ order.get_pay_mode_display }}</span></p>
+					<p>订单金额：<span>￥{{ order.paid }}</span></p>
+				</div>
+			</div>
+			<div class="bottom">
+				<a href="{% url 'order_detail' order.oid %}">查看订单</a>
+				<a href="{% url 'index' %}">回到首页</a>
+			</div>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+		<title>手机号设置</title>
+	</head>
+<body>
+    <header id="loginHeader">
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">手机号设置</p>
+		</header>
+		<section class="reg-main">
+			<form id="telForm" action="" method="post">
+                {% csrf_token %}
+				<div class="form-group form-group-tel">
+					<input type="tel" name="tel" id="Tel" placeholder="请输入手机号" value="" />
+					<button type="button">获取手机验证码</button>
+					<i class="icon iconfont icon-cha"></i>
+				</div>
+				<div class="form-group">
+					<input type="text" name="verify" id="telTelVerify" placeholder="请输入收到的验证码" />
+					<i class="icon iconfont icon-cha"></i>
+                </div>
+                <div class="form-group">
+					<input type="password" name="password" id="telPassword" placeholder="请设置6-20位登录密码" />
+					<i class="icon iconfont icon-cha"></i>
+				</div>
+				<div class="form-group">
+					<input type="password" id="telPassword2" placeholder="请再次输入密码" />
+					<i class="icon iconfont icon-cha"></i>
+				</div>
+                <div class="error-info none">
+                    <i class="icon iconfont icon-jian"></i> <span></span>
+                </div>
+                <a class="btn" id="telSub">提 交</a>
+            </form>
+        </section>
+        <div class="jump-modal none">
+			<div class="jump">
+				<i class="icon iconfont icon-loading"></i>
+			</div>
+			<p>手机号设置成功，即将跳转</p>
+		</div>
+</body>
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/login.js' %}"></script>
+    <script>
+        function jump(){
+            $('.jump-modal').removeClass('none');
+            setTimeout(function () {
+                location.replace('http://'+location.hostname+':'+location.port+'/mine');
+            },1000)
+        }
+        {% if tel %}jump();{% endif %}
+    </script>
+</html>

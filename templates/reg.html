@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="{% static 'css/fontcss/iconfont.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+		<title>会员注册</title>
+	</head>
+
+	<body>
+		<header id="loginHeader">
+			<div class="nav-back">
+				<a href="javascript:history.back(-1);"> <i class="icon iconfont icon-jtleft"></i> </a>
+			</div>
+			<p class="nav-title">会员注册</p>
+		</header>
+		<section class="reg-main">
+			<form id="regForm" action="" method="post">
+                {% csrf_token %}
+				<div class="form-group form-group-tel">
+					<input type="tel" name="tel" id="regTel" placeholder="请输入手机号" value="{{ reg_tel }}" />
+					<button type="button">获取手机验证码</button>
+					<i class="icon iconfont icon-cha"></i>
+				</div>
+				<div class="form-group">
+					<input type="text" name="verify" id="regTelVerify" placeholder="请输入收到的验证码" />
+					<i class="icon iconfont icon-cha"></i>
+				</div>
+				<div class="form-group">
+					<input type="password" name="password" id="regPassword" placeholder="请设置6-20位登录密码" />
+					<i class="icon iconfont icon-cha"></i>
+				</div>
+				<div class="form-group">
+					<input type="password" id="regPassword2" placeholder="请再次输入密码" />
+					<i class="icon iconfont icon-cha"></i>
+				</div>
+                <div class="error-info none">
+                    <i class="icon iconfont icon-jian"></i> <span></span>
+                </div>
+				<a class="btn" id="regSub">注 册</a>
+				<div class="form-bottom">
+					<div class="pull-left">
+						注册即视为同意 <a class="protocol" href="javascript:void(0);">《用户协议》</a>
+					</div>
+					<div class="pull-right back-login">
+						<a href="{% url 'login' %}">返回登录 <i class="icon iconfont icon-denglu"></i></a>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</form>
+		</section>
+        <div class="jump-modal none">
+			<div class="jump">
+				<i class="icon iconfont icon-loading"></i>
+			</div>
+			<p>注册成功，即将跳转</p>
+		</div>
+	</body>
+	<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script>
+        function jump(){
+            $('.jump-modal').removeClass('none');
+            setTimeout(function () {
+                location.replace('http://'+location.hostname+':'+location.port+'/login');
+            },1000)
+        };
+        {% if is_active %}jump();{% endif %}
+    </script>
+    <script src="{% static 'js/login.js' %}"></script>
+</html>
