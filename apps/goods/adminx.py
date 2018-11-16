@@ -41,7 +41,7 @@ class GoodsAdmin(object):
     list_filter = ['name', 'gid', 'en_name', 'have_commission', 'price', 'to_front', 'counts', 'visits', 'is_new', 'is_hot', 'is_ex',
                    'to_front_time']
     readonly_fields = ['to_front_time', 'modify_time', 'counts', 'visits']
-    list_editable = ['price', 'gid', 'have_commission', 'to_front']
+    list_editable = ['name', 'price', 'gid', 'have_commission', 'to_front']
     list_export = ('xls', 'json')
     inlines = [ClassifyInline, ImagesInline, ExtraImagesInline]
     style_fields = {"detail": "ueditor", "endetail": "ueditor"}

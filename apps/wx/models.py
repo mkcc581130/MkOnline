@@ -6,6 +6,22 @@ from django.db import models
 from users.models import UserProfile
 
 
+class KeyWord(models.Model):
+    keyword = models.CharField (verbose_name=u'关键词', max_length=100, help_text='用户发出的关键词')
+    content = models.TextField (verbose_name=u'内容', null=True, blank=True, help_text='回复给用户的内容')
+
+    pub_date = models.DateTimeField (verbose_name=u'发表时间', auto_now_add=True)
+    update_time = models.DateTimeField (verbose_name=u'更新时间', auto_now=True, null=True)
+    published = models.BooleanField (verbose_name=u'发布状态', default=True)
+
+    def __unicode__(self):
+        return self.keyword
+
+    class Meta:
+        verbose_name = '关键词'
+        verbose_name_plural = '关键词列表'
+
+
 class WxConfig(models.Model):
     name = models.CharField(max_length=30, verbose_name=u"公众号名称")
     token = models.CharField(max_length=20, verbose_name=u"Token")
@@ -24,19 +40,3 @@ class WxConfig(models.Model):
     class Meta:
         verbose_name = u"微信配置"
         verbose_name_plural = u"微信配置"
-
-
-class KeyWord(models.Model):
-    keyword = models.CharField (verbose_name=u'关键词', max_length=100, primary_key=True, help_text='用户发出的关键词')
-    content = models.TextField (verbose_name=u'内容', null=True, blank=True, help_text='回复给用户的内容')
-
-    pub_date = models.DateTimeField (verbose_name=u'发表时间', auto_now_add=True)
-    update_time = models.DateTimeField (verbose_name=u'更新时间', auto_now=True, null=True)
-    published = models.BooleanField (verbose_name=u'发布状态', default=True)
-
-    def __unicode__(self):
-        return self.keyword
-
-    class Meta:
-        verbose_name = '关键词'
-        verbose_name_plural = '微信回复关键词列表'

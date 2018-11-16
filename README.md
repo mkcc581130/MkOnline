@@ -4,7 +4,7 @@
 1. 先安装mysql
    安装的时候需要密码设置为root
 
-2. 通过navicat 新建数据库 库名为mxonline
+2. 通过navicat 新建数据库 库名为MkOnline
 
 3. navicat 导入sql文件
 

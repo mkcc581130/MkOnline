@@ -1,10 +1,6 @@
 # coding:utf-8
 
-import base64
-import hashlib
-import httplib
-import json
-import urllib
+import urllib, hashlib, json, httplib, base64
 
 
 class ExpressSearch(object):

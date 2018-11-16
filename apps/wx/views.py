@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import KeyWord, WxConfig
 from customers.models import Customer, WxOauth, City
 from goods.models import GoodsList
-from MxOnline.settings import MEDIA_URL
+from MkOnline.settings import MEDIA_URL
 import requests
 import json
 # 初始化

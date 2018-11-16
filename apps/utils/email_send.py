@@ -5,7 +5,7 @@ from random import Random
 from django.core.mail import send_mail
 
 from users.models import EmailVerifyRecord
-from MxOnline.settings import EMAIL_FROM
+from MkOnline.settings import EMAIL_FROM
 
 
 def random_str(randomlength=8):

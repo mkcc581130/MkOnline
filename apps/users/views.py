@@ -37,13 +37,12 @@ class Authenticate(object):
         self.request = request
 
     """
-        判断用户是否已经登录。
+        Whether the user has logged in.
     """
     @property
     def is_active(self):
         if 'username' in self.request.session:
-            username = self.request.session['username']  # session中用户名
-            # 判断用户是否存在
+            username = self.request.session['username']
             try:
                 customer = Customer.objects.get(Q(email=username) | Q(tel=username))
                 password = self.request.session['password']
@@ -72,11 +71,11 @@ class InvitationManage(object):
         s = ''
         if kwargs:
             s = "_".join(["%s_%s" % (key, value) for key, value in kwargs])
-        self.qr_path = 'media/customer/qr_invitation/%s_%s.png' % (invite_id, s)  # 二维码图片路径
-        self.path = 'media/customer/invitation/%s_%s.png' % (invite_id, s)  # 推荐图图片路径
+        self.qr_path = 'media/customer/qr_invitation/%s_%s.png' % (invite_id, s)
+        self.path = 'media/customer/invitation/%s_%s.png' % (invite_id, s)
 
     """
-        当用户没有推荐码时，获取推荐码！
+        The user does not have an invitation code, get an invitation code.
     """
     @staticmethod
     def get_invite_id():
@@ -94,7 +93,7 @@ class InvitationManage(object):
         return invite_id
 
     """
-        获取二维码图
+        Get the qr code.
     """
     def get_qrcode(self, request):
         qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=8)
@@ -107,7 +106,7 @@ class InvitationManage(object):
         return img
 
     """
-        获取包含二维码的推荐图
+        Get the image contains the qr code.
     """
     def get_invite_img(self, request, icon_url):
         img = self.get_qrcode(request)
@@ -122,30 +121,36 @@ class InvitationManage(object):
 
 
 class IndexView(View):
-    # 首页视图
     @staticmethod
     def get(request):
+        # 取出轮播图
         request.session['login_back'] = request.build_absolute_uri()
         if 'first' not in request.session:
             request.session['first'] = 'welcome'
             return redirect('index')
-        banners = Banner.objects.all().order_by('index')  # 轮播图
-        new_goods = GoodsList.objects.filter(Q(is_new=True) & Q(to_front=True)).order_by('-sort')  # 新品
-        hot_goods = GoodsList.objects.filter(Q(is_hot=True) & Q(to_front=True)).order_by('-sort')  # 热卖商品
-        ex_goods = GoodsList.objects.filter(Q(is_ex=True) & Q(to_front=True)).order_by('-sort')  # 精选商品
-        dis_goods = GoodsList.objects.filter(Q(is_dis=True) & Q(to_front=True)).order_by('-sort')  # 限时折扣商品
-        # 截取一定数量的商品列表
+        banners = Banner.objects.all().order_by('index')
+        new_goods = GoodsList.objects.filter(Q(is_new=True) & Q(to_front=True)).order_by('-sort')
+        hot_goods = GoodsList.objects.filter(Q(is_hot=True) & Q(to_front=True)).order_by('-sort')
+        ex_goods = GoodsList.objects.filter(Q(is_ex=True) & Q(to_front=True)).order_by('-sort')
+        dis_goods = GoodsList.objects.filter(Q(is_dis=True) & Q(to_front=True)).order_by('-sort')
         new_goods = (len(new_goods) > 6) and new_goods[:6] or new_goods
         hot_goods = (len(hot_goods) > 6) and hot_goods[:6] or hot_goods
         ex_goods = (len(ex_goods) > 6) and ex_goods[:6] or ex_goods
         dis_goods = (len(dis_goods) > 10) and dis_goods[:10] or dis_goods
         active = Authenticate(request).is_active
+        coupon = ''
         if active:
             username = request.session['username']
             customer = Customer.objects.get(Q(tel=username) | Q(email=username) | Q(wxoauth__openid=username))
-            cart_len = len(CartGoods.objects.filter(Q(single=False) & Q(customer=customer)))  # 购物车商品数量
+            cart_len = len(CartGoods.objects.filter(Q(single=False) & Q(customer=customer)))
+            auto_coupon = Coupon.objects.filter(is_auto=True)
+            customer_coupon = Coupon.objects.filter(customer=customer)
+            for c in auto_coupon:
+                if c not in customer_coupon:
+                    customer.coupon.add(c)
+                    coupon = c
+                    break
         else:
-            # 未登录时，购物车商品数量
             cart_len = len(CartGoods.objects.filter(anonymous=request.COOKIES['sessionid']))
         return render(request, 'index.html', {
             'is_active': active,
@@ -154,38 +159,32 @@ class IndexView(View):
             'hot': hot_goods,
             'ex': ex_goods,
             'dis': dis_goods,
-            'len': cart_len
+            'len': cart_len,
+            'coupon': coupon
         })
 
 
 class DetailView(View):
-    # 商品详情视图
     @staticmethod
     def get(request, gid):
-        # 判断是否有商品id参数
         if gid:
-            request.session['login_back'] = request.build_absolute_uri()  # 设置登录回调session参数
-            # 判断是否有微信的code参数
+            request.session['login_back'] = request.build_absolute_uri()
             if "code" in request.GET:
-                wx_config = WxConfig.objects.get(id=1)  # 数据库微信参数
-                wx_oauth = WechatOauth(app_id=wx_config.appid, secret=wx_config.appsecret)  # 微信登录实例
-                fetch_access_token = wx_oauth.fetch_access_token(code=request.GET['code'])  # 获取access_token
+                wx_config = WxConfig.objects.get(id=1)
+                wx_oauth = WechatOauth(app_id=wx_config.appid, secret=wx_config.appsecret)
+                fetch_access_token = wx_oauth.fetch_access_token(code=request.GET['code'])
                 try:
-                    # 更新access_token, refresh_token
                     wx_oauth_obj = WxOauth.objects.get(openid=fetch_access_token['openid'])
                     wx_oauth_obj.access_token = fetch_access_token['access_token']
                     wx_oauth_obj.refresh_token = fetch_access_token['refresh_token']
                     wx_oauth_obj.save()
                 except WxOauth.DoesNotExist:
-                    # 不存在微信登录信息，获取用户微信信息
                     user_info = wx_oauth.get_user_info()
                     invite_id = InvitationManage().get_invite_id()
                     user_icon = '/media/customer/icon/newDefault.png'
                     invitation = Invitation(code=invite_id)
                     invitation.save()
-                    # 判断是否有推荐人
                     if not request.GET['state'] == '0':
-                        # 生成用户数据
                         customer = Customer(username=user_info['nickname'].encode('iso8859-1'), classify_id=2,
                                             user_icon=user_icon, invitation=invitation,
                                             invited=Invitation.objects.get(code=request.GET['state']),
@@ -195,22 +194,19 @@ class DetailView(View):
                                             user_icon=user_icon, invitation=invitation,
                                             last_ip=request.META['REMOTE_ADDR'])
                     customer.save()
-                    # 生成用户微信数据并保存
                     WxOauth(customer=customer, openid=fetch_access_token['openid'],
                             access_token=fetch_access_token['access_token'],
                             refresh_token=fetch_access_token['refresh_token']).save()
-                    # 延时下载用户头像，加快登录速度
                     if user_info['headimgurl']:
                         tasks.download_icon.delay(invite_id, user_info['headimgurl'])
-                request.session['username'] = fetch_access_token['openid']  # 设置session用户
+                request.session['username'] = fetch_access_token['openid']
                 return redirect('detail', gid)
-            # 获取商品库存
             elif 'img_id' in request.GET:
                 return JsonResponse({'stocks': Images.objects.get(id=request.GET['img_id']).get_stocks()})
-
             goods = GoodsList.objects.get(id=gid)
             is_active = Authenticate(request).is_active
             content = {}
+
             if is_active:
                 username = request.session['username']
                 customer = Customer.objects.get(Q(tel=username) | Q(email=username) | Q(wxoauth__openid=username))
@@ -233,7 +229,6 @@ class DetailView(View):
                     dic = wechat_instance.create_qrcode({"expire_seconds": 2592000, "action_name": "QR_STR_SCENE",
                                                          "action_info": {"scene": {"scene_str": scene_str}}})
                     return redirect(dic['url'])
-                # 获取二维码，推荐图
                 if 'img' in request.GET:
                     im = InvitationManage(invite_id=customer.invitation.code, goods_id=gid)
                     if request.GET['img'] == 'qrcode':
@@ -248,7 +243,6 @@ class DetailView(View):
                     else:
                         path = ''
                     return JsonResponse({'img_url': '/%s' % path})
-                # 商品加入收藏
                 elif 'follow' in request.GET:
                     username = request.session['username']
                     customer = Customer.objects.get(
@@ -259,22 +253,18 @@ class DetailView(View):
                     else:
                         customer.follow.add(goods)
                     return JsonResponse({'success': True})
-                # 判断用户是否为代言人，享受折扣大小
                 if customer.classify_id != 1:
                     content['dis_price'] = goods.price * customer.classify.discount / 100
                     content['promote'] = "%.2f" % (goods.price * customer.classify.first_commission / 100)
-                # 获取地址
                 if address:
                     content['address'] = address[0]
                 content['len'] = len(CartGoods.objects.filter(Q(customer=customer) & Q(single=False)))
                 follow = GoodsList.objects.filter(customer=customer)
                 content['follow'] = goods in follow
-                # 判断是否为微信
                 if 'is_wx' in content:
                     content['iid'] = customer.invitation.code
             else:
                 content['len'] = len(CartGoods.objects.filter(anonymous=request.COOKIES['sessionid']))
-            # 页面尾部商品
             ex_goods = GoodsList.objects.filter(Q(is_ex=True) & Q(to_front=True)).order_by('-sort')
             ex_goods = (len(ex_goods) > 10) and ex_goods[:10] or ex_goods
             content.update({
@@ -282,10 +272,8 @@ class DetailView(View):
                 'goods': goods,
                 'ex': ex_goods,
             })
-            # 是否上架
             if goods.to_front and goods.get_imgs():
                 content['to_front'] = True
-            # 是否为微信客户端
             if re.search("MicroMessenger", request.META['HTTP_USER_AGENT']):
                 content['is_wx'] = True
                 conf = WechatConf(
@@ -303,13 +291,14 @@ class DetailView(View):
                                                                                 noncestr=content['noncestr'],
                                                                                 url=request.build_absolute_uri())
             return render(request, 'detail.html', content)
+            # except:
+            #     return redirect('index')
         else:
             return redirect('index')
 
     @staticmethod
     def post(request, gid):
         if 'method' in request.POST:
-            # 加入购物车
             if request.POST['method'] == 'add':
                 if Authenticate(request).is_active:
                     username = request.session['username']
@@ -331,7 +320,6 @@ class DetailView(View):
 
 
 class DifferView(View):
-    # 商品分类视图
     @staticmethod
     def get(request):
         if 'cid' in request.GET:
@@ -356,7 +344,6 @@ class DifferView(View):
 
 
 class MoreView(View):
-    # 商品列表通用视图
     @staticmethod
     def get(request, way):
         if way == 'new':
@@ -391,7 +378,6 @@ class MoreView(View):
 
 
 class SearchView(View):
-    # 搜索结果视图
     @staticmethod
     def get(request):
         if 'search' in request.GET:
@@ -418,11 +404,9 @@ class SearchView(View):
 
 
 class TelView(View):
-    # 手机号设置视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
-            # 获取验证码
             if "tel" in request.GET:
                 tel = request.GET['tel']
                 if Customer.objects.filter(tel=tel):
@@ -440,7 +424,6 @@ class TelView(View):
 
     @staticmethod
     def post(request):
-        # 按钮提交
         if Authenticate(request).is_active:
             username = request.session['username']
             c = Customer.objects.get(Q(tel=username) | Q(email=username) | Q(wxoauth__openid=username))
@@ -464,7 +447,6 @@ class TelView(View):
 
 
 class RegisterView(View):
-    # 注册视图
     @staticmethod
     def get(request):
         if "tel" in request.GET:
@@ -480,7 +462,6 @@ class RegisterView(View):
 
     @staticmethod
     def post(request):
-        # 按钮提交
         tel = request.POST['tel']
         verify = request.POST['verify']
         password = request.POST['password']
@@ -499,7 +480,6 @@ class RegisterView(View):
         invite_id = InvitationManage().get_invite_id()
         invitation = Invitation(code=invite_id)
         invitation.save()
-        # 判断是否有推荐人
         if 'iid' in request.GET:
             customer = Customer(username="一慧会员%s" % tel, tel=tel, password=make_password(password),
                                 invitation=invitation, classify_id=2,
@@ -513,10 +493,8 @@ class RegisterView(View):
 
 
 class LoginView(View):
-    # 登录视图
     @staticmethod
     def get(request):
-        # 获取验证码
         if "tel" in request.GET:
             tel = request.GET['tel']
             if not Customer.objects.filter(tel=tel):
@@ -526,7 +504,7 @@ class LoginView(View):
                 return JsonResponse({'msg': 'success'})
             else:
                 return JsonResponse({'msg': '该手机号获取过于频繁，请稍后重试！'})
-        # 微信登录
+
         elif "code" in request.GET:
             wx_config = WxConfig.objects.get(id=1)
             wx_oauth = WechatOauth(app_id=wx_config.appid, secret=wx_config.appsecret)
@@ -558,7 +536,7 @@ class LoginView(View):
                 if user_info['headimgurl']:
                     tasks.download_icon.delay(invite_id, user_info['headimgurl'])
             request.session['username'] = fetch_access_token['openid']
-            # 登录跳转
+
             if 'login_back' in request.session:
                 return redirect(request.session['login_back'])
             else:
@@ -573,7 +551,6 @@ class LoginView(View):
                                          scope='snsapi_userinfo', state=request.GET['iid']).create_url()
                     content.update({"iid": request.GET['iid']})
                 else:
-                    # 获取微信登录 url
                     wx_url = WechatOauth(app_id=wx_config.appid, secret=wx_config.appsecret,
                                          redirect_uri='http://%s/login/' % request.get_host(),
                                          scope='snsapi_userinfo', state='0').create_url()
@@ -584,7 +561,6 @@ class LoginView(View):
 
     @staticmethod
     def post(request):
-        # 用户名登录
         if 'username' in request.POST:
             username = request.POST['username']
             password = request.POST['password']
@@ -606,7 +582,6 @@ class LoginView(View):
                 return JsonResponse({"msg": "密码错误，请重新输入！"})
             except CartGoods.DoesNotExist:
                 return JsonResponse({"msg": "用户名不存在，请重新输入！"})
-        # 手机号登录
         elif 'tel' in request.POST:
             tel = request.POST['tel']
             verify = request.POST['verify']
@@ -630,7 +605,6 @@ class LoginView(View):
 
 
 class FindPwd1View(View):
-    # 找回密码视图1
     @staticmethod
     def get(request, p1):
         find_form = FindPwdForm()
@@ -651,7 +625,6 @@ class FindPwd1View(View):
 
 
 class FindPwd2View(View):
-    # 找回密码视图2
     @staticmethod
     def get(request, p1):
         if 'find_tel' in request.session:
@@ -679,7 +652,6 @@ class FindPwd2View(View):
 
 
 class MineView(View):
-    # 个人中心视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -693,7 +665,6 @@ class MineView(View):
 
 
 class AccountView(View):
-    # 账户管理视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -745,7 +716,6 @@ class AccountView(View):
 
 
 class DeliveryView(View):
-    # 收货地址视图
     @staticmethod
     def get(request, q1):
         if Authenticate(request).is_active:
@@ -785,7 +755,6 @@ class DeliveryView(View):
 
 
 class DeliveryChangeView(View):
-    # 修改收货地址视图
     @staticmethod
     def get(request, q1, q2):
         if Authenticate(request).is_active:
@@ -859,7 +828,6 @@ class DeliveryChangeView(View):
 
 
 class OrderView(View):
-    # 用户订单视图
     @staticmethod
     def get(request, index):
         if Authenticate(request).is_active:
@@ -872,7 +840,7 @@ class OrderView(View):
 
 
 class OrderDetailView(View):
-    # 订单详情视图
+
     @staticmethod
     def confirm(username, order):
         if order.customers.tel == username or order.customers.email == username or \
@@ -1001,7 +969,6 @@ class OrderDetailView(View):
 
 
 class ExpressView(View):
-    # 物流查询视图
     @staticmethod
     def get(request, oid):
         if Authenticate(request).is_active:
@@ -1020,7 +987,6 @@ class ExpressView(View):
 
 
 class CouponView(View):
-    # 优惠券列表视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -1046,7 +1012,6 @@ class CouponView(View):
 
 
 class CouponGoodsView(View):
-    # 优惠券商品视图
     @staticmethod
     def get(request, cid):
         if Authenticate(request).is_active:
@@ -1057,7 +1022,6 @@ class CouponGoodsView(View):
 
 
 class CartView(View):
-    # 购物车视图
     @staticmethod
     def get(request):
         if 'number' in request.GET:
@@ -1117,7 +1081,6 @@ class CartView(View):
 
 
 class CartCommitView(View):
-    # 提交订单视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -1214,7 +1177,6 @@ class CartCommitView(View):
 
 
 class PayView(View):
-    # 付款页面视图
     @staticmethod
     def get(request, oid):
         if Authenticate(request).is_active:
@@ -1367,7 +1329,6 @@ class PayView(View):
 
 
 class AutoPayView(View):
-    # 判断跳转微信支付还是支付宝支付
     @staticmethod
     def get(request):
         if re.search("MicroMessenger", request.META['HTTP_USER_AGENT']):
@@ -1380,7 +1341,6 @@ class AutoPayView(View):
 
 @csrf_exempt
 def pay_success_view(request, oid):
-    # 付款成功视图
     if Authenticate(request).is_active:
         username = request.session['username']
         order = Order.objects.get(oid=oid)
@@ -1501,7 +1461,6 @@ def pay_success_view(request, oid):
 
 
 class TransferView(View):
-    # 转账视图
     @staticmethod
     def get(request):
         if re.search("MicroMessenger", request.META['HTTP_USER_AGENT']):
@@ -1598,7 +1557,6 @@ class TransferView(View):
 
 @csrf_exempt
 def transfer_success_view(request, oid):
-    # 转账成功视图
     if request.method == "GET":
         if Authenticate(request).is_active and re.search("MicroMessenger", request.META['HTTP_USER_AGENT']):
             try:
@@ -1652,7 +1610,6 @@ def transfer_success_view(request, oid):
 
 
 class EndorsementView(View):
-    # 代言人中心视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -1676,7 +1633,6 @@ class EndorsementView(View):
 
 
 class EndorsementTypeView(View):
-    # 代言人类型视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -1690,7 +1646,6 @@ class EndorsementTypeView(View):
 
 
 class EndorsementCashView(View):
-    # 佣金提现视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -1766,7 +1721,6 @@ class EndorsementCashView(View):
 
 
 class AuthorizeView(View):
-    # 账户管理->微信授权视图
     @staticmethod
     def get(request, status):
         if Authenticate(request).is_active:
@@ -1810,7 +1764,6 @@ class AuthorizeView(View):
 
 
 class PosterView(View):
-    # 海报视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -1828,7 +1781,6 @@ class PosterView(View):
 
 
 class InvitationView(View):
-    # 代言人中心->邀请码视图
     @staticmethod
     def get(request):
         if Authenticate(request).is_active:
@@ -1883,14 +1835,12 @@ class InvitationView(View):
 
 
 class QuestionsView(View):
-    # 常见问题视图
     @staticmethod
     def get(request):
         return render(request, 'questions.html', {'questions': NormalQuestion.objects.all().order_by('sort')})
 
 
 class QuestionDetailView(View):
-    # 常见问题详情视图
     @staticmethod
     def get(request, qid):
         try:
@@ -1900,7 +1850,6 @@ class QuestionDetailView(View):
 
 
 class EBookView(View):
-    # 产品电子书视图
     @staticmethod
     def get(request):
         return render(request, 'ebook.html',
@@ -1908,7 +1857,6 @@ class EBookView(View):
 
 
 class RedPacketView(View):
-    # 红包视图
     @staticmethod
     def get(request, oid):
         if Authenticate(request).is_active:
@@ -1958,7 +1906,6 @@ class RedPacketView(View):
 
 
 class PromoteListView(View):
-    # 已推广用户列表
     @staticmethod
     def get(request, action):
         if Authenticate(request).is_active:

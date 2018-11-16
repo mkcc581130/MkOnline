@@ -5,7 +5,7 @@ from DjangoUeditor.models import UEditorField
 from django.db import models
 
 from users.models import UserProfile
-from MxOnline.settings import MEDIA_URL
+from MkOnline.settings import MEDIA_URL
 
 
 class ClassifyOne(models.Model):
